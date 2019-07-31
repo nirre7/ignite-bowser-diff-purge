@@ -2,7 +2,7 @@
 
 [ignite-bowser](https://github.com/infinitered/ignite-bowser) based customized version of [rn-diff-purge](https://github.com/react-native-community/rn-diff-purge/), all credit should to to the authors of that great tool!
 
-# Ignite-bowser diff PURGE
+## What?
 
 This repository exposes an untouched Ignite Bowser based app generated with the ignite-cli
 `npx ignite new IgniteDiffApp -b ignite-bowser --detox`. Each new Ignite Bowser release causes a new project to be created, removing the old one, and getting a diff between them. This way, the diff is always clean, always in sync with the changes of the init template.
