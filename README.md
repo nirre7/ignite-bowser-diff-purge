@@ -23,11 +23,9 @@ This repository exposes an untouched Ignite Bowser based app generated with the 
 
 ## To see the full table containing all releases click [HERE](https://nirre7.github.io/ignite-diff-purge/)
 
-## FAQ
+## Notes
 
-### Why starting from 4.0.0?
-
-Because all older releases broke when I ran them, might be because of new vs old version of ignite-cli?
+Versions 3.1.0, 3.1.1, 3.1.2 and 3.20 was not created with Detox tests since that broke the build.
 
 ### How did you do this?
 
