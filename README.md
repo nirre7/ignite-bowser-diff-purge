@@ -35,7 +35,7 @@ Probably having some nice alternating row color, having the leftest column stay 
 
 ## Diff table (full table [HERE](https://react-native-community.github.io/rn-diff-purge/))
 
-| From->To | P   | U   | R   | G   | E   |     | T   | I   | M   | E   | !   | !   |
+| From->To | R   | N   |     | C   | O   | R   | E   |     | T   | E   | A   | M   |
 | -------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4.0.0    | X   |     |     |     |     |     |     |     |     |     |     |     |
 
