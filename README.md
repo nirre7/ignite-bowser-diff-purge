@@ -1,3 +1,7 @@
+# Ignite-bowser diff PURGE
+
+Is an [ignite-bowser](https://github.com/infinitered/ignite-bowser) customized version [rn-diff-purge](https://github.com/react-native-community/rn-diff-purge/), all credit should to to the authors of that great tool!
+
 # RN diff PURGE
 
 This repository exposes an untouched React Native app generated with the CLI
