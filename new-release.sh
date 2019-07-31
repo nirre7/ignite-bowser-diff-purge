@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-
 ErrorReleaseExists=2
 ErrorReleaseArgMissing=3
 
@@ -12,8 +11,7 @@ ReadmeFile=README.md
 ReadmeTable=README_TABLE.md
 ReadmeTableBig=README_TABLE_BIG.md
 
-NumberOfReleases=12 # the number of releases on the table
-
+NumberOfReleases=20 # the number of releases on the table
 
 function guardMissingArg () {
     if [ "$#" -ne 1 ]; then
@@ -49,7 +47,8 @@ function generateNewReleaseBranch () {
     git checkout -b "$branchName"
 
     # generate app
-    npx ignite new "$AppName" -b ignite-bowser@"$newRelease" --detox
+    # npx ignite new "$AppName" -b ignite-bowser@"$newRelease" --detox
+    npx ignite new "$AppName" -b ignite-bowser@"$newRelease" --no-detox
 
     # remove the .git folder in created ignite app
     cd "$AppName"
