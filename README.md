@@ -35,5 +35,5 @@ Because all older releases broke when I ran them, might be because of new vs old
 ### How did you do this?
 
 I used the great [rn-diff-purge](https://github.com/react-native-community/rn-diff-purge/) tool with some minor tweaks. 
-All credit to the creator(s) and maintainers of rn-diff-purge
+All credit to the creator(s) and maintainers of [rn-diff-purge](https://github.com/react-native-community/rn-diff-purge/)
 
