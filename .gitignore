@@ -4,6 +4,6 @@
 .DS_Store
 
 # lock files
-RnDiffApp/yarn.lock
-RnDiffApp/package-lock.json
-RnDiffApp/ios/Podfile.lock
+IgniteDiffApp/yarn.lock
+IgniteDiffApp/package-lock.json
+IgniteDiffApp/ios/Podfile.lock
