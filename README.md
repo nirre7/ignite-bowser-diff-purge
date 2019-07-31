@@ -9,9 +9,10 @@ This repository exposes an untouched Ignite Bowser based app generated with the 
 
 ## Diff table
 
-| From->To | P   | U   | R   | G   | E   |     | T   | I   | M   | E   | !   | !   |
-| -------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2.0.0    | X   |     |     |     |     |     |     |     |     |     |     |     |
+| From->To | P                                                                                           | U   | R   | G   | E   |     | T   | I   | M   | E   | !   | !   |
+| -------- | ------------------------------------------------------------------------------------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2.0.1    | X                                                                                           | -   |     |     |     |     |     |     |     |     |     |     |
+| 2.0.0    | [->2.0.1](https://github.com/nirre7/ignite-diff-purge/compare/release/2.0.0..release/2.0.1) | X   |     |     |     |     |     |     |     |     |     |     |
 
 ## To see the full table containing all releases click [HERE](https://nirre7.github.io/ignite-diff-purge/)
 
