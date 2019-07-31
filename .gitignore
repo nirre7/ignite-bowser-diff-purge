@@ -9,5 +9,5 @@ IgniteDiffApp/
 node_modules/
 
 # git worktree
-wt-app
-wt-diffs
+wt-app/
+wt-diffs/
