@@ -51,6 +51,11 @@ function generateNewReleaseBranch () {
     # generate app
     npx ignite new "$AppName" -b ignite-bowser@"$newRelease" --detox
 
+    # remove the .git folder in created ignite app
+    cd "$AppName"
+    rm -rf .git
+    cd ..
+
     # commit and push branch
     git add "$AppName"
     git commit -m "Release $newRelease"
