@@ -32,14 +32,14 @@ releasesWithNewCli=(
 4.5.0
 )
 
-npx yarn global add ignite-cli@2.2.0
-for v in "${releasesWithOldCli[@]}"
-do
-    echo $v
-    ./new-release.sh $v
-done
+#npx yarn global add ignite-cli@2.2.0
+#for v in "${releasesWithOldCli[@]}"
+#do
+#    echo $v
+#    ./new-release.sh $v
+#done
 
-npx yarn global add ignite-cli
+#npx yarn global add ignite-cli
 for v in "${releasesWithNewCli[@]}"
 do
     echo $v
