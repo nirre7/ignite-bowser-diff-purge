@@ -21,7 +21,7 @@ const generateTable = async () => {
         'purge time!!',
         'i love diffs',
         'diffs == fun',
-        'rn core team',
+        'IgniteBowser',
     ]
 
     const diffTable = [
