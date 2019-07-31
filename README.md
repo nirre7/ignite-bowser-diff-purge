@@ -1,13 +1,13 @@
 # Ignite-bowser diff PURGE
 
-Is an [ignite-bowser](https://github.com/infinitered/ignite-bowser) customized version [rn-diff-purge](https://github.com/react-native-community/rn-diff-purge/), all credit should to to the authors of that great tool!
+[ignite-bowser](https://github.com/infinitered/ignite-bowser) based customized version of [rn-diff-purge](https://github.com/react-native-community/rn-diff-purge/), all credit should to to the authors of that great tool!
 
-# RN diff PURGE
+# Ignite-bowser diff PURGE
 
 This repository exposes an untouched Ignite Bowser based app generated with the ignite-cli
 `npx ignite new IgniteDiffApp -b ignite-bowser --detox`. Each new Ignite Bowser release causes a new project to be created, removing the old one, and getting a diff between them. This way, the diff is always clean, always in sync with the changes of the init template.
 
-## Diff table (full table [HERE](https://nirre7.github.io/ignite-diff-purge/))
+## Diff table
 
 | From->To | R                                                                                           | N                                                                                           |                                                                                             | C                                                                                           | O                                                                                           | R                                                                                           | E                                                                                           |                                                                                             | T                                                                                           | E                                                                                           | A                                                                                           | M   |
 | -------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --- |
