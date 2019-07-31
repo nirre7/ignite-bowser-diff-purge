@@ -18,7 +18,7 @@ const removeSomething = async () => {
             const fullpath = `${diffsDir}/${file}`
             console.log(fullpath)
 
-            const toBeReplaced = '@@ -5,11 +5,11 @@\n 	<key>CFBundleDevelopmentRegion</key>\n 	<string>en</string>\n 	<key>CFBundleDisplayName</key>\n-	<string>RnDiffApp</string>\n+	<string>Hello App Display Name</string>\n'
+            const toBeReplaced = '@@ -5,11 +5,11 @@\n 	<key>CFBundleDevelopmentRegion</key>\n 	<string>en</string>\n 	<key>CFBundleDisplayName</key>\n-	<string>IgniteDiffApp</string>\n+	<string>Hello App Display Name</string>\n'
 
             replace.sync({
                 files: fullpath,

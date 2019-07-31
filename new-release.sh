@@ -5,7 +5,7 @@ set -euxo pipefail
 ErrorReleaseExists=2
 ErrorReleaseArgMissing=3
 
-AppName=RnDiffApp
+AppName=IgniteDiffApp
 AppBaseBranch=app-base
 ReleasesFile=RELEASES
 ReadmeFile=README.md
@@ -54,7 +54,7 @@ function generateNewReleaseBranch () {
     # commit and push branch
     git add "$AppName"
     git commit -m "Release $newRelease"
-    git push origin --delete "$branchName"
+    # TODO do we need this?? => git push origin --delete "$branchName"
     git push --set-upstream origin "$branchName"
 
     # go back to master

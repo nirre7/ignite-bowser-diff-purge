@@ -26,19 +26,19 @@ curl https://github.com/react-native-community/rn-diff-purge/compare/release/0.2
 
 #### 2 Prepare the patch
 
-The patch is made for the RnDiffApp located in the *RnDiffApp* folder of this repository.
+The patch is made for the IgniteDiffApp located in the *IgniteDiffApp* folder of this repository.
 To use it in your own repository, some changes are needed.
 
-Don't worry about the root folder *RnDiffApp*, it can be ignored with the option `-p 2`
+Don't worry about the root folder *IgniteDiffApp*, it can be ignored with the option `-p 2`
 (see https://git-scm.com/docs/git-apply)
 
 Then, some files include the name of the app in their path:
 
-- All files in the `ios` directory (example: `ios/RnDiffApp/AppDelegate.m`)
+- All files in the `ios` directory (example: `ios/IgniteDiffApp/AppDelegate.m`)
 - Some files in the `android` directory (example:
-`android/app/src/main/java/com/rndiffapp/MainActivity.java`)
+`android/app/src/main/java/com/igniteDiffApp/MainActivity.java`)
 
-You have to edit the patch and replace all occurences of `ios/RnDiffApp` and `com/rndiffapp`
+You have to edit the patch and replace all occurences of `ios/IgniteDiffApp` and `com/igniteDiffApp`
 by the name of your app.
 
 #### 3 Set up the 3-way merge
@@ -69,11 +69,11 @@ git apply upgrade-rn.patch --exclude=package.json -p 2 --3way
 # Download the patch
 curl https://github.com/react-native-community/rn-diff-purge/compare/release/0.29.0...release/0.30.0.diff > upgrade-rn.patch
 
-# Replace RnDiffApp occurences
+# Replace IgniteDiffApp occurences
 appNameCamelCase=MyApp
 appNameLowerCase=myapp
-sed -i "" "s-ios/RnDiffApp-ios/${appNameCamelCase}-" upgrade-rn.patch
-sed -i "" "s-java/com/rndiffapp-java/com/${appNameLowerCase}-" upgrade-rn.patch
+sed -i "" "s-ios/IgniteDiffApp-ios/${appNameCamelCase}-" upgrade-rn.patch
+sed -i "" "s-java/com/igniteDiffApp-java/com/${appNameLowerCase}-" upgrade-rn.patch
 
 # Set up the 3-way merge
 git remote add rn-diff-purge https://github.com/react-native-community/rn-diff-purge.git

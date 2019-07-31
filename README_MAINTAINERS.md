@@ -7,7 +7,7 @@ When a new release of `react-native` is out on [npm](https://www.npmjs.com/packa
 
 - Run `git config diff.nodiff.command true`.
 
-This is a setting that, in combination with the `.gitattributes` file, tells the scripts to not pay attention to some files that don't need to be in the diffs, like the root `.gitignore` of this repo (not the RnDiffApp project).
+This is a setting that, in combination with the `.gitattributes` file, tells the scripts to not pay attention to some files that don't need to be in the diffs, like the root `.gitignore` of this repo (not the IgniteDiffApp project).
 
 - Execute the main script.
 ```sh
