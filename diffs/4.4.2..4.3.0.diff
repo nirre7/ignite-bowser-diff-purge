@@ -1,0 +1,21 @@
+diff --git a/.gitignore b/.gitignore
+index 9f11b75..b07efae 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,9 @@
+ .idea/
++
++# macOS
++.DS_Store
++
++# lock files
++RnDiffApp/yarn.lock
++RnDiffApp/package-lock.json
++RnDiffApp/ios/Podfile.lock
+diff --git a/IgniteDiffApp b/IgniteDiffApp
+index 4bcd053..81511df 160000
+--- a/IgniteDiffApp
++++ b/IgniteDiffApp
+@@ -1 +1 @@
+-Subproject commit 4bcd0533014f65703d69d209b2ad43258453039b
++Subproject commit 81511df9023469552f21e00720dad6ed963410d0
