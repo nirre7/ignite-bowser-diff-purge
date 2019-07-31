@@ -1,5 +1,6 @@
 # project
-RnDiffApp/
+IgniteDiffApp/
+.idea/
 
 # macOS
 .DS_Store
