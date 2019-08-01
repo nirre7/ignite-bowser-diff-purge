@@ -6,7 +6,7 @@ const semver = require('semver')
 const getStdin = require('get-stdin')
 
 
-const RepoUrl='https://github.com/nirre7/ignite-diff-purge'
+const RepoUrl='https://github.com/nirre7/ignite-bowser-diff-purge'
 
 
 const generateTable = async () => {
