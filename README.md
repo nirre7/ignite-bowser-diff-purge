@@ -36,7 +36,8 @@ This repository exposes an untouched Ignite Bowser based app generated with the 
 
 ## Notes
 
-Versions 3.1.0, 3.1.1, 3.1.2 and 3.20 was not created with Detox tests since that broke the build.
+- When upgrading to Ignite-Bowser >=4.6.0 there are some breaking changes in React Native please read [this blog post](https://facebook.github.io/react-native/blog/2019/07/03/version-60) and [the release changelog](https://github.com/react-native-community/releases/blob/master/CHANGELOG.md#060) for more information
+- Versions 3.1.0, 3.1.1, 3.1.2 and 3.20 was not created with Detox tests since that broke the build.
 
 ### How did you do this?
 
