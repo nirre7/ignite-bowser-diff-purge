@@ -16,20 +16,9 @@ releasesWithOldCli=(
 
 # with  yarn global add ignite-cli
 releasesWithNewCli=(
-4.0.0-beta.4
-4.0.0
-4.1.0
-4.1.1
-4.2.0
-4.2.1
-4.3.0
-4.4.0
-4.4.1
-4.4.2
-4.4.3
-4.4.4
-4.4.5
-4.5.0
+4.7.2
+4.7.3
+4.7.4
 )
 
 #npx yarn global add ignite-cli@2.2.0
