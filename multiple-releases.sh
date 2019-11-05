@@ -16,9 +16,11 @@ releasesWithOldCli=(
 
 # with  yarn global add ignite-cli
 releasesWithNewCli=(
-4.7.2
-4.7.3
-4.7.4
+#4.10.0 could not build: ignite-bowser does not have a boilerplate.js
+4.10.1
+4.11.0
+4.11.1
+4.11.2
 )
 
 #npx yarn global add ignite-cli@2.2.0
