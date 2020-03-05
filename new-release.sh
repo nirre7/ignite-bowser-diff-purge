@@ -47,7 +47,7 @@ function generateNewReleaseBranch () {
     git checkout -b "$branchName"
 
     # generate app
-    npx ignite new "$AppName" -b ignite-bowser@"$newRelease" --detox
+    npx ignite new "$AppName" -b ignite-bowser@"$newRelease" --detox --expo
 
     # remove the .git folder in created ignite app
     cd "$AppName"
