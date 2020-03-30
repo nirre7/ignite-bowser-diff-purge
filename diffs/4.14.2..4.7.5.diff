@@ -1,0 +1,1641 @@
+diff --git a/IgniteDiffApp/.gitignore b/IgniteDiffApp/.gitignore
+index b2cee48..d12b94f 100644
+--- a/IgniteDiffApp/.gitignore
++++ b/IgniteDiffApp/.gitignore
+@@ -64,7 +64,3 @@ buck-out/
+ 
+ # VS Code
+ .vscode
+-
+-# Configurations
+-app/config/env.*.js
+-!env.js
+diff --git a/IgniteDiffApp/.solidarity b/IgniteDiffApp/.solidarity
+index cd5e390..582c35e 100644
+--- a/IgniteDiffApp/.solidarity
++++ b/IgniteDiffApp/.solidarity
+@@ -2,6 +2,13 @@
+   "$schema": "http://json.schemastore.org/solidaritySchema",
+   "requirements": {
+     "Node": [{ "rule": "cli", "binary": "node", "semver": ">=8.6.0" }],
++    "React Native": [
++      {
++        "rule": "cli",
++        "binary": "react-native",
++        "semver": ">=2.0.1"
++      }
++    ],
+     "Xcode": [
+       {
+         "rule": "cli",
+diff --git a/IgniteDiffApp/android/app/src/main/java/com/ignitediffapp/MainActivity.java b/IgniteDiffApp/android/app/src/main/java/com/ignitediffapp/MainActivity.java
+index cac41eb..a5f6665 100644
+--- a/IgniteDiffApp/android/app/src/main/java/com/ignitediffapp/MainActivity.java
++++ b/IgniteDiffApp/android/app/src/main/java/com/ignitediffapp/MainActivity.java
+@@ -2,9 +2,9 @@ package com.ignitediffapp;
+ 
+ import com.facebook.react.ReactActivity;
+ 
+-        import com.facebook.react.ReactActivityDelegate;
+-        import com.facebook.react.ReactRootView;
+-        import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
++      import com.facebook.react.ReactActivityDelegate;
++      import com.facebook.react.ReactRootView;
++      import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
+ 
+ public class MainActivity extends ReactActivity {
+ 
+diff --git a/IgniteDiffApp/app/app.tsx b/IgniteDiffApp/app/app.tsx
+index 4be1144..bc14458 100644
+--- a/IgniteDiffApp/app/app.tsx
++++ b/IgniteDiffApp/app/app.tsx
+@@ -4,17 +4,12 @@
+ 
+ import "./i18n"
+ import React, { useState, useEffect } from "react"
+-import { YellowBox } from "react-native"
++import { AppRegistry, YellowBox } from "react-native"
+ import { StatefulNavigator, BackButtonHandler, exitRoutes } from "./navigation"
++import { StorybookUIRoot } from "../storybook"
+ import { RootStore, RootStoreProvider, setupRootStore } from "./models/root-store"
+ 
+ import { contains } from "ramda"
+-import { enableScreens } from "react-native-screens"
+-
+-// This puts screens in a native ViewController or Activity. If you want fully native
+-// stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
+-// https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
+-enableScreens()
+ 
+ /**
+  * Ignore some yellowbox warnings. Some of these are for deprecated functions
+@@ -23,7 +18,6 @@ enableScreens()
+ YellowBox.ignoreWarnings([
+   "componentWillMount is deprecated",
+   "componentWillReceiveProps is deprecated",
+-  "Require cycle:",
+ ])
+ 
+ /**
+@@ -50,12 +44,10 @@ const canExit = (routeName: string) => contains(routeName, exitRoutes)
+ /**
+  * This is the root component of our app.
+  */
+-export default function App() {
+-  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined) // prettier-ignore
++export const App: React.FunctionComponent<{}> = () => {
++  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
+   useEffect(() => {
+-    ;(async () => {
+-      setupRootStore().then(setRootStore)
+-    })()
++    setupRootStore().then(setRootStore)
+   }, [])
+ 
+   // Before we show the app, we have to wait for our state to be ready.
+@@ -79,3 +71,16 @@ export default function App() {
+     </RootStoreProvider>
+   )
+ }
++
++/**
++ * This needs to match what's found in your app_delegate.m and MainActivity.java.
++ */
++const APP_NAME = "IgniteDiffApp"
++
++// Should we show storybook instead of our app?
++//
++// ⚠️ Leave this as `false` when checking into git.
++const SHOW_STORYBOOK = false
++
++const RootComponent = SHOW_STORYBOOK && __DEV__ ? StorybookUIRoot : App
++AppRegistry.registerComponent(APP_NAME, () => RootComponent)
+diff --git a/IgniteDiffApp/app/components/bullet-item/bullet-item.tsx b/IgniteDiffApp/app/components/bullet-item/bullet-item.tsx
+index bdb474a..ca94a41 100644
+--- a/IgniteDiffApp/app/components/bullet-item/bullet-item.tsx
++++ b/IgniteDiffApp/app/components/bullet-item/bullet-item.tsx
+@@ -1,6 +1,7 @@
+ import * as React from "react"
+ import { View, ViewStyle, ImageStyle, TextStyle } from "react-native"
+-import { Text, Icon } from "../"
++import { Text } from "../text"
++import { Icon } from "../icon"
+ import { spacing } from "../../theme"
+ 
+ const BULLET_ITEM: ViewStyle = {
+diff --git a/IgniteDiffApp/app/components/bullet-item/index.ts b/IgniteDiffApp/app/components/bullet-item/index.ts
+new file mode 100644
+index 0000000..1facf05
+--- /dev/null
++++ b/IgniteDiffApp/app/components/bullet-item/index.ts
+@@ -0,0 +1 @@
++export * from "./bullet-item"
+diff --git a/IgniteDiffApp/app/components/button/button.story.tsx b/IgniteDiffApp/app/components/button/button.story.tsx
+index 94707d9..4ccbde2 100644
+--- a/IgniteDiffApp/app/components/button/button.story.tsx
++++ b/IgniteDiffApp/app/components/button/button.story.tsx
+@@ -2,9 +2,9 @@ import * as React from "react"
+ import { ViewStyle, TextStyle, Alert } from "react-native"
+ import { storiesOf } from "@storybook/react-native"
+ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+-import { Button } from "./button"
++import { Button } from "./"
+ 
+-declare let module
++declare var module
+ 
+ const buttonStyleArray: ViewStyle[] = [{ paddingVertical: 100 }, { borderRadius: 0 }]
+ 
+diff --git a/IgniteDiffApp/app/components/button/button.tsx b/IgniteDiffApp/app/components/button/button.tsx
+index 3d33afd..bc284d0 100644
+--- a/IgniteDiffApp/app/components/button/button.tsx
++++ b/IgniteDiffApp/app/components/button/button.tsx
+@@ -1,6 +1,6 @@
+ import * as React from "react"
+ import { TouchableOpacity } from "react-native"
+-import { Text } from "../"
++import { Text } from "../text"
+ import { viewPresets, textPresets } from "./button.presets"
+ import { ButtonProps } from "./button.props"
+ import { mergeAll, flatten } from "ramda"
+diff --git a/IgniteDiffApp/app/components/button/index.ts b/IgniteDiffApp/app/components/button/index.ts
+new file mode 100644
+index 0000000..e93d26f
+--- /dev/null
++++ b/IgniteDiffApp/app/components/button/index.ts
+@@ -0,0 +1 @@
++export * from "./button"
+diff --git a/IgniteDiffApp/app/components/checkbox/checkbox.story.tsx b/IgniteDiffApp/app/components/checkbox/checkbox.story.tsx
+index fa1309a..75da42d 100644
+--- a/IgniteDiffApp/app/components/checkbox/checkbox.story.tsx
++++ b/IgniteDiffApp/app/components/checkbox/checkbox.story.tsx
+@@ -5,10 +5,10 @@ import * as React from "react"
+ import { View, ViewStyle } from "react-native"
+ import { storiesOf } from "@storybook/react-native"
+ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+-import { Checkbox } from "./checkbox"
++import { Checkbox } from "./"
+ import { Toggle } from "react-powerplug"
+ 
+-declare let module
++declare var module
+ 
+ const arrayStyle: ViewStyle[] = [{ paddingVertical: 40 }, { alignSelf: "flex-end" }]
+ const arrayOutlineStyle: ViewStyle[] = [{ borderColor: "#b443c9" }, { borderWidth: 25 }]
+diff --git a/IgniteDiffApp/app/components/checkbox/checkbox.tsx b/IgniteDiffApp/app/components/checkbox/checkbox.tsx
+index 7a1084f..65ee796 100644
+--- a/IgniteDiffApp/app/components/checkbox/checkbox.tsx
++++ b/IgniteDiffApp/app/components/checkbox/checkbox.tsx
+@@ -1,6 +1,6 @@
+ import * as React from "react"
+ import { TouchableOpacity, TextStyle, ViewStyle, View } from "react-native"
+-import { Text } from "../"
++import { Text } from "../text"
+ import { color, spacing } from "../../theme"
+ import { CheckboxProps } from "./checkbox.props"
+ import { mergeAll, flatten } from "ramda"
+diff --git a/IgniteDiffApp/app/components/checkbox/index.ts b/IgniteDiffApp/app/components/checkbox/index.ts
+new file mode 100644
+index 0000000..1b929d0
+--- /dev/null
++++ b/IgniteDiffApp/app/components/checkbox/index.ts
+@@ -0,0 +1 @@
++export * from "./checkbox"
+diff --git a/IgniteDiffApp/app/components/form-row/form-row.story.tsx b/IgniteDiffApp/app/components/form-row/form-row.story.tsx
+index 45bbd89..d78322d 100644
+--- a/IgniteDiffApp/app/components/form-row/form-row.story.tsx
++++ b/IgniteDiffApp/app/components/form-row/form-row.story.tsx
+@@ -4,11 +4,12 @@
+ import * as React from "react"
+ import { storiesOf } from "@storybook/react-native"
+ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+-import { Text, FormRow } from "../"
++import { FormRow } from "./form-row"
++import { Text } from "../text"
+ import { color } from "../../theme/color"
+ import { ViewStyle } from "react-native"
+ 
+-declare let module
++declare var module
+ 
+ const TEXT_STYLE_OVERRIDE = {
+   color: color.storybookTextColor,
+diff --git a/IgniteDiffApp/app/components/form-row/index.ts b/IgniteDiffApp/app/components/form-row/index.ts
+new file mode 100644
+index 0000000..e7b1a23
+--- /dev/null
++++ b/IgniteDiffApp/app/components/form-row/index.ts
+@@ -0,0 +1 @@
++export * from "./form-row"
+diff --git a/IgniteDiffApp/app/components/header/header.props.ts b/IgniteDiffApp/app/components/header/header.props.ts
+index 19e9e3d..365a10d 100644
+--- a/IgniteDiffApp/app/components/header/header.props.ts
++++ b/IgniteDiffApp/app/components/header/header.props.ts
+@@ -1,5 +1,5 @@
+ import { ViewStyle, TextStyle } from "react-native"
+-import { IconTypes } from "../icon/icons"
++import { IconTypes } from "../icon"
+ 
+ export interface HeaderProps {
+   /**
+diff --git a/IgniteDiffApp/app/components/header/header.story.tsx b/IgniteDiffApp/app/components/header/header.story.tsx
+index 2ec848c..2baf761 100644
+--- a/IgniteDiffApp/app/components/header/header.story.tsx
++++ b/IgniteDiffApp/app/components/header/header.story.tsx
+@@ -5,7 +5,7 @@ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+ import { Header } from "./header"
+ import { color } from "../../theme"
+ 
+-declare let module
++declare var module
+ 
+ const VIEWSTYLE = {
+   flex: 1,
+diff --git a/IgniteDiffApp/app/components/header/header.tsx b/IgniteDiffApp/app/components/header/header.tsx
+index d230c01..1ac0a3b 100644
+--- a/IgniteDiffApp/app/components/header/header.tsx
++++ b/IgniteDiffApp/app/components/header/header.tsx
+@@ -1,7 +1,9 @@
+ import * as React from "react"
+ import { View, ViewStyle, TextStyle } from "react-native"
+ import { HeaderProps } from "./header.props"
+-import { Button, Icon, Text } from "../"
++import { Button } from "../button"
++import { Icon } from "../icon"
++import { Text } from "../text"
+ import { spacing } from "../../theme"
+ import { translate } from "../../i18n/"
+ 
+diff --git a/IgniteDiffApp/app/components/header/index.ts b/IgniteDiffApp/app/components/header/index.ts
+new file mode 100644
+index 0000000..48b9e78
+--- /dev/null
++++ b/IgniteDiffApp/app/components/header/index.ts
+@@ -0,0 +1 @@
++export * from "./header"
+diff --git a/IgniteDiffApp/app/components/icon/icon.story.tsx b/IgniteDiffApp/app/components/icon/icon.story.tsx
+index fa599ac..5b0c33e 100644
+--- a/IgniteDiffApp/app/components/icon/icon.story.tsx
++++ b/IgniteDiffApp/app/components/icon/icon.story.tsx
+@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react-native"
+ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+ import { Icon } from "./icon"
+ 
+-declare let module
++declare var module
+ 
+ storiesOf("Icon", module)
+   .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)
+diff --git a/IgniteDiffApp/app/components/icon/icons/index.ts b/IgniteDiffApp/app/components/icon/icons/index.ts
+index 00e8a59..b701049 100644
+--- a/IgniteDiffApp/app/components/icon/icons/index.ts
++++ b/IgniteDiffApp/app/components/icon/icons/index.ts
+@@ -1,6 +1,6 @@
+ export const icons = {
+-  back: require("./arrow-left.png"),
+-  bullet: require("./bullet.png"),
++  back: require("./arrow-left@2x.png"),
++  bullet: require("./bullet@2x.png"),
+ }
+ 
+ export type IconTypes = keyof typeof icons
+diff --git a/IgniteDiffApp/app/components/icon/index.ts b/IgniteDiffApp/app/components/icon/index.ts
+new file mode 100644
+index 0000000..144e840
+--- /dev/null
++++ b/IgniteDiffApp/app/components/icon/index.ts
+@@ -0,0 +1,2 @@
++export * from "./icon"
++export * from "./icons"
+diff --git a/IgniteDiffApp/app/components/index.ts b/IgniteDiffApp/app/components/index.ts
+deleted file mode 100644
+index 0449c9b..0000000
+--- a/IgniteDiffApp/app/components/index.ts
++++ /dev/null
+@@ -1,11 +0,0 @@
+-export * from "./bullet-item/bullet-item"
+-export * from "./button/button"
+-export * from "./checkbox/checkbox"
+-export * from "./form-row/form-row"
+-export * from "./header/header"
+-export * from "./icon/icon"
+-export * from "./screen/screen"
+-export * from "./switch/switch"
+-export * from "./text/text"
+-export * from "./text-field/text-field"
+-export * from "./wallpaper/wallpaper"
+diff --git a/IgniteDiffApp/app/components/screen/index.ts b/IgniteDiffApp/app/components/screen/index.ts
+new file mode 100644
+index 0000000..8c7396e
+--- /dev/null
++++ b/IgniteDiffApp/app/components/screen/index.ts
+@@ -0,0 +1 @@
++export * from "./screen"
+diff --git a/IgniteDiffApp/app/components/switch/index.ts b/IgniteDiffApp/app/components/switch/index.ts
+new file mode 100644
+index 0000000..b0af0ed
+--- /dev/null
++++ b/IgniteDiffApp/app/components/switch/index.ts
+@@ -0,0 +1 @@
++export * from "./switch"
+diff --git a/IgniteDiffApp/app/components/switch/switch.story.tsx b/IgniteDiffApp/app/components/switch/switch.story.tsx
+index d390ab5..02ea37c 100644
+--- a/IgniteDiffApp/app/components/switch/switch.story.tsx
++++ b/IgniteDiffApp/app/components/switch/switch.story.tsx
+@@ -6,9 +6,9 @@ import { View, ViewStyle } from "react-native"
+ import { storiesOf } from "@storybook/react-native"
+ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+ import { Toggle } from "react-powerplug"
+-import { Switch } from "./switch"
++import { Switch } from "."
+ 
+-declare let module
++declare var module
+ 
+ const styleArray: ViewStyle[] = [{ borderColor: "#686868" }]
+ 
+diff --git a/IgniteDiffApp/app/components/text-field/index.ts b/IgniteDiffApp/app/components/text-field/index.ts
+new file mode 100644
+index 0000000..44064b6
+--- /dev/null
++++ b/IgniteDiffApp/app/components/text-field/index.ts
+@@ -0,0 +1 @@
++export * from "./text-field"
+diff --git a/IgniteDiffApp/app/components/text-field/text-field.story.tsx b/IgniteDiffApp/app/components/text-field/text-field.story.tsx
+index 46e2af0..0566867 100644
+--- a/IgniteDiffApp/app/components/text-field/text-field.story.tsx
++++ b/IgniteDiffApp/app/components/text-field/text-field.story.tsx
+@@ -4,11 +4,12 @@
+ import * as React from "react"
+ import { storiesOf } from "@storybook/react-native"
+ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+-import { Text, TextField } from "../"
++import { Text } from "../text"
++import { TextField } from "./"
+ import { State } from "react-powerplug"
+ import { ViewStyle, TextStyle, Alert } from "react-native"
+ 
+-declare let module
++declare var module
+ 
+ const styleArray: ViewStyle[] = [{ paddingHorizontal: 30 }, { borderWidth: 30 }]
+ 
+@@ -24,7 +25,7 @@ const inputStyleArray: TextStyle[] = [
+     borderColor: "#7fff00",
+   },
+ ]
+-let alertWhenFocused = true
++var alertWhenFocused = true
+ 
+ storiesOf("TextField", module)
+   .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)
+diff --git a/IgniteDiffApp/app/components/text-field/text-field.tsx b/IgniteDiffApp/app/components/text-field/text-field.tsx
+index 8a5e01d..6d0ff1a 100644
+--- a/IgniteDiffApp/app/components/text-field/text-field.tsx
++++ b/IgniteDiffApp/app/components/text-field/text-field.tsx
+@@ -2,7 +2,7 @@ import * as React from "react"
+ import { View, TextInput, TextStyle, ViewStyle } from "react-native"
+ import { color, spacing, typography } from "../../theme"
+ import { translate } from "../../i18n"
+-import { Text } from "../"
++import { Text } from "../text"
+ import { TextFieldProps } from "./text-field.props"
+ import { mergeAll, flatten } from "ramda"
+ 
+diff --git a/IgniteDiffApp/app/components/text/index.ts b/IgniteDiffApp/app/components/text/index.ts
+new file mode 100644
+index 0000000..6417a56
+--- /dev/null
++++ b/IgniteDiffApp/app/components/text/index.ts
+@@ -0,0 +1 @@
++export * from "./text"
+diff --git a/IgniteDiffApp/app/components/text/text.story.tsx b/IgniteDiffApp/app/components/text/text.story.tsx
+index cad1ae6..180ad79 100644
+--- a/IgniteDiffApp/app/components/text/text.story.tsx
++++ b/IgniteDiffApp/app/components/text/text.story.tsx
+@@ -8,7 +8,7 @@ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+ import { color } from "../../theme"
+ import { Text } from "./text"
+ 
+-declare let module
++declare var module
+ 
+ const VIEWSTYLE = {
+   flex: 1,
+@@ -57,7 +57,7 @@ storiesOf("Text", module)
+       <UseCase text="tx" usage="Used for looking up i18n keys.">
+         <View style={VIEWSTYLE}>
+           <Text tx="common.ok" />
+-          <Text tx="common.cancel" />
++          <Text tx="omglol" />
+         </View>
+       </UseCase>
+       <UseCase
+diff --git a/IgniteDiffApp/app/components/wallpaper/bg.png b/IgniteDiffApp/app/components/wallpaper/BG.png
+similarity index 100%
+rename from IgniteDiffApp/app/components/wallpaper/bg.png
+rename to IgniteDiffApp/app/components/wallpaper/BG.png
+diff --git a/IgniteDiffApp/app/components/wallpaper/index.ts b/IgniteDiffApp/app/components/wallpaper/index.ts
+new file mode 100644
+index 0000000..e66cbc2
+--- /dev/null
++++ b/IgniteDiffApp/app/components/wallpaper/index.ts
+@@ -0,0 +1 @@
++export * from "./wallpaper"
+diff --git a/IgniteDiffApp/app/components/wallpaper/wallpaper.story.tsx b/IgniteDiffApp/app/components/wallpaper/wallpaper.story.tsx
+index 3516574..18599c6 100644
+--- a/IgniteDiffApp/app/components/wallpaper/wallpaper.story.tsx
++++ b/IgniteDiffApp/app/components/wallpaper/wallpaper.story.tsx
+@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react-native"
+ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+ import { Wallpaper } from "./wallpaper"
+ 
+-declare let module
++declare var module
+ 
+ storiesOf("Wallpaper", module)
+   .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)
+diff --git a/IgniteDiffApp/app/components/wallpaper/wallpaper.tsx b/IgniteDiffApp/app/components/wallpaper/wallpaper.tsx
+index 50e1367..855390a 100644
+--- a/IgniteDiffApp/app/components/wallpaper/wallpaper.tsx
++++ b/IgniteDiffApp/app/components/wallpaper/wallpaper.tsx
+@@ -3,7 +3,7 @@ import { Image } from "react-native"
+ import { presets } from "./wallpaper.presets"
+ import { WallpaperProps } from "./wallpaper.props"
+ 
+-const defaultImage = require("./bg.png")
++const defaultImage = require("./bg@2x.png")
+ 
+ /**
+  * For your text displaying needs.
+diff --git a/IgniteDiffApp/app/config/env.js b/IgniteDiffApp/app/config/env.js
+deleted file mode 100644
+index c5d7ffc..0000000
+--- a/IgniteDiffApp/app/config/env.js
++++ /dev/null
+@@ -1 +0,0 @@
+-module.exports = __DEV__ ? require("./env.dev") : require("./env.prod")
+diff --git a/IgniteDiffApp/app/i18n/i18n.ts b/IgniteDiffApp/app/i18n/i18n.ts
+index 79de3d8..e8eed38 100644
+--- a/IgniteDiffApp/app/i18n/i18n.ts
++++ b/IgniteDiffApp/app/i18n/i18n.ts
+@@ -8,7 +8,6 @@ i18n.fallbacks = true
+ i18n.translations = { en, ja }
+ 
+ const fallback = { languageTag: "en", isRTL: false }
+-
+ const { languageTag } =
+   RNLocalize.findBestAvailableLanguage(Object.keys(i18n.translations)) || fallback
+ i18n.locale = languageTag
+diff --git a/IgniteDiffApp/app/models/environment.ts b/IgniteDiffApp/app/models/environment.ts
+index e8569b1..4277b6a 100644
+--- a/IgniteDiffApp/app/models/environment.ts
++++ b/IgniteDiffApp/app/models/environment.ts
+@@ -1,11 +1,6 @@
++import { Reactotron } from "../services/reactotron"
+ import { Api } from "../services/api"
+ 
+-let ReactotronDev
+-if (__DEV__) {
+-  const { Reactotron } = require("../services/reactotron")
+-  ReactotronDev = Reactotron
+-}
+-
+ /**
+  * The environment is a place where services and shared dependencies between
+  * models live.  They are made available to every model via dependency injection.
+@@ -13,25 +8,20 @@ if (__DEV__) {
+ export class Environment {
+   constructor() {
+     // create each service
+-    if (__DEV__) {
+-      // dev-only services
+-      this.reactotron = new ReactotronDev()
+-    }
++    this.reactotron = new Reactotron()
+     this.api = new Api()
+   }
+ 
+   async setup() {
+     // allow each service to setup
+-    if (__DEV__) {
+-      await this.reactotron.setup()
+-    }
++    await this.reactotron.setup()
+     await this.api.setup()
+   }
+ 
+   /**
+    * Reactotron is only available in dev.
+    */
+-  reactotron: typeof ReactotronDev
++  reactotron: Reactotron
+ 
+   /**
+    * Our api.
+diff --git a/IgniteDiffApp/app/navigation/back-button-handler.tsx b/IgniteDiffApp/app/navigation/back-button-handler.tsx
+index 439df52..d34e5cb 100644
+--- a/IgniteDiffApp/app/navigation/back-button-handler.tsx
++++ b/IgniteDiffApp/app/navigation/back-button-handler.tsx
+@@ -1,6 +1,6 @@
+ import { FunctionComponent, useEffect } from "react"
+ import { BackHandler } from "react-native"
+-import { observer } from "mobx-react-lite"
++import { observer } from "mobx-react"
+ import { NavigationActions } from "react-navigation"
+ import { useStores } from "../models/root-store"
+ 
+diff --git a/IgniteDiffApp/app/navigation/navigation-events.ts b/IgniteDiffApp/app/navigation/navigation-events.ts
+index fd8c6c0..fb6449f 100644
+--- a/IgniteDiffApp/app/navigation/navigation-events.ts
++++ b/IgniteDiffApp/app/navigation/navigation-events.ts
+@@ -40,11 +40,7 @@ export const NavigationEvents = types.model("NavigationEvents").volatile(() => {
+    */
+   const addListener = (eventName: EventType, handler: NavigationEventCallback) => {
+     if (eventName !== "action") {
+-      return {
+-        remove: () => {
+-          /* nothing to do */
+-        },
+-      }
++      return { remove: () => {} }
+     }
+ 
+     // subscribe
+diff --git a/IgniteDiffApp/app/navigation/navigation-store.ts b/IgniteDiffApp/app/navigation/navigation-store.ts
+index 1bdad5f..005d415 100644
+--- a/IgniteDiffApp/app/navigation/navigation-store.ts
++++ b/IgniteDiffApp/app/navigation/navigation-store.ts
+@@ -57,7 +57,7 @@ export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
+      * @param action The new navigation action to perform
+      * @param shouldPush Should we push or replace the whole stack?
+      */
+-    dispatch(action: NavigationAction, shouldPush = true) {
++    dispatch(action: NavigationAction, shouldPush: boolean = true) {
+       const previousNavState = shouldPush ? self.state : null
+       self.state = RootNavigator.router.getStateForAction(action, previousNavState) || self.state
+       self.fireSubscribers(action, previousNavState, self.state)
+diff --git a/IgniteDiffApp/app/navigation/primary-navigator.ts b/IgniteDiffApp/app/navigation/primary-navigator.ts
+index b37a725..2f980f5 100644
+--- a/IgniteDiffApp/app/navigation/primary-navigator.ts
++++ b/IgniteDiffApp/app/navigation/primary-navigator.ts
+@@ -1,5 +1,6 @@
+-import { createStackNavigator } from "react-navigation-stack"
+-import { WelcomeScreen, DemoScreen } from "../screens"
++import { createStackNavigator } from "react-navigation"
++import { WelcomeScreen } from "../screens/welcome-screen"
++import { DemoScreen } from "../screens/demo-screen"
+ 
+ export const PrimaryNavigator = createStackNavigator(
+   {
+diff --git a/IgniteDiffApp/app/navigation/root-navigator.ts b/IgniteDiffApp/app/navigation/root-navigator.ts
+index 8237157..a2fe3f1 100644
+--- a/IgniteDiffApp/app/navigation/root-navigator.ts
++++ b/IgniteDiffApp/app/navigation/root-navigator.ts
+@@ -1,10 +1,6 @@
+-import { createStackNavigator } from "react-navigation-stack"
++import { createStackNavigator } from "react-navigation"
+ import { PrimaryNavigator } from "./primary-navigator"
+ 
+-// prettier-ignore
+-import {
+-} from "../screens" // eslint-disable-line @typescript-eslint/no-unused-vars
+-
+ export const RootNavigator = createStackNavigator(
+   {
+     primaryStack: { screen: PrimaryNavigator },
+diff --git a/IgniteDiffApp/app/navigation/stateful-navigator.tsx b/IgniteDiffApp/app/navigation/stateful-navigator.tsx
+index 9c8ca70..41c57bf 100644
+--- a/IgniteDiffApp/app/navigation/stateful-navigator.tsx
++++ b/IgniteDiffApp/app/navigation/stateful-navigator.tsx
+@@ -1,5 +1,5 @@
+ import * as React from "react"
+-import { observer } from "mobx-react-lite"
++import { observer } from "mobx-react"
+ // @ts-ignore: until they update @type/react-navigation
+ import { getNavigation, NavigationScreenProp, NavigationState } from "react-navigation"
+ import { useStores } from "../models/root-store"
+diff --git a/IgniteDiffApp/app/screens/demo-screen/demo-screen.tsx b/IgniteDiffApp/app/screens/demo-screen/demo-screen.tsx
+index bba88b5..da79d06 100644
+--- a/IgniteDiffApp/app/screens/demo-screen/demo-screen.tsx
++++ b/IgniteDiffApp/app/screens/demo-screen/demo-screen.tsx
+@@ -1,12 +1,16 @@
+ import * as React from "react"
+ import { Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
+-import { NavigationInjectedProps } from "react-navigation"
+-import { BulletItem, Button, Header, Text, Screen, Wallpaper } from "../../components"
++import { NavigationScreenProps } from "react-navigation"
++import { Screen } from "../../components/screen"
++import { Text } from "../../components/text"
++import { Button } from "../../components/button"
++import { Wallpaper } from "../../components/wallpaper"
++import { Header } from "../../components/header"
+ import { color, spacing } from "../../theme"
++import { logoIgnite, heart } from "./"
++import { BulletItem } from "../../components/bullet-item"
+ import { Api } from "../../services/api"
+ import { save } from "../../utils/storage"
+-export const logoIgnite = require("./logo-ignite.png")
+-export const heart = require("./heart.png")
+ 
+ const FULL: ViewStyle = { flex: 1 }
+ const CONTAINER: ViewStyle = {
+@@ -76,7 +80,7 @@ const HINT: TextStyle = {
+   marginVertical: spacing[2],
+ }
+ 
+-export interface DemoScreenProps extends NavigationInjectedProps<{}> {}
++export interface DemoScreenProps extends NavigationScreenProps<{}> {}
+ 
+ export const DemoScreen: React.FunctionComponent<DemoScreenProps> = props => {
+   const goBack = React.useMemo(() => () => props.navigation.goBack(null), [props.navigation])
+@@ -99,9 +103,7 @@ export const DemoScreen: React.FunctionComponent<DemoScreenProps> = props => {
+               },
+             },
+           },
+-          functionNames: function hello() {
+-            /* dummy function */
+-          },
++          functionNames: function hello() {},
+         },
+         preview: "More control with display()",
+         important: true,
+diff --git a/IgniteDiffApp/app/screens/demo-screen/index.ts b/IgniteDiffApp/app/screens/demo-screen/index.ts
+new file mode 100644
+index 0000000..7108f30
+--- /dev/null
++++ b/IgniteDiffApp/app/screens/demo-screen/index.ts
+@@ -0,0 +1,3 @@
++export * from "./demo-screen"
++export const logoIgnite = require("./logo-ignite.png")
++export const heart = require("./heart.png")
+diff --git a/IgniteDiffApp/app/screens/index.ts b/IgniteDiffApp/app/screens/index.ts
+deleted file mode 100644
+index 7f8af77..0000000
+--- a/IgniteDiffApp/app/screens/index.ts
++++ /dev/null
+@@ -1,2 +0,0 @@
+-export * from "./welcome-screen/welcome-screen"
+-export * from "./demo-screen/demo-screen"
+diff --git a/IgniteDiffApp/app/screens/welcome-screen/index.ts b/IgniteDiffApp/app/screens/welcome-screen/index.ts
+new file mode 100644
+index 0000000..680fba4
+--- /dev/null
++++ b/IgniteDiffApp/app/screens/welcome-screen/index.ts
+@@ -0,0 +1,2 @@
++export * from "./welcome-screen"
++export const bowserLogo = require("./bowser.png")
+diff --git a/IgniteDiffApp/app/screens/welcome-screen/welcome-screen.tsx b/IgniteDiffApp/app/screens/welcome-screen/welcome-screen.tsx
+index 0f546fe..57d54da 100644
+--- a/IgniteDiffApp/app/screens/welcome-screen/welcome-screen.tsx
++++ b/IgniteDiffApp/app/screens/welcome-screen/welcome-screen.tsx
+@@ -1,9 +1,13 @@
+ import * as React from "react"
+ import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+-import { NavigationInjectedProps } from "react-navigation"
+-import { Button, Header, Screen, Text, Wallpaper } from "../../components"
++import { NavigationScreenProps } from "react-navigation"
++import { Text } from "../../components/text"
++import { Button } from "../../components/button"
++import { Screen } from "../../components/screen"
++import { Wallpaper } from "../../components/wallpaper"
++import { Header } from "../../components/header"
+ import { color, spacing } from "../../theme"
+-const bowserLogo = require("./bowser.png")
++import { bowserLogo } from "./"
+ 
+ const FULL: ViewStyle = { flex: 1 }
+ const CONTAINER: ViewStyle = {
+@@ -74,7 +78,7 @@ const FOOTER_CONTENT: ViewStyle = {
+   paddingHorizontal: spacing[4],
+ }
+ 
+-export interface WelcomeScreenProps extends NavigationInjectedProps<{}> {}
++export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
+ 
+ export const WelcomeScreen: React.FunctionComponent<WelcomeScreenProps> = props => {
+   const nextScreen = React.useMemo(() => () => props.navigation.navigate("demo"), [
+diff --git a/IgniteDiffApp/app/services/api/api-config.ts b/IgniteDiffApp/app/services/api/api-config.ts
+index 3061563..1fec60e 100644
+--- a/IgniteDiffApp/app/services/api/api-config.ts
++++ b/IgniteDiffApp/app/services/api/api-config.ts
+@@ -1,7 +1,4 @@
+-// Use this import if you want to use "env.js" file
+-// const { API_URL } = require("../../config/env")
+-// Or just specify it directly like this:
+-const API_URL = "http://example.com"
++import { API_URL } from "react-native-dotenv"
+ 
+ /**
+  * The options used to configure the API.
+diff --git a/IgniteDiffApp/app/utils/storage/storage.test.ts b/IgniteDiffApp/app/utils/storage/storage.test.ts
+index b93ac04..bbee423 100644
+--- a/IgniteDiffApp/app/utils/storage/storage.test.ts
++++ b/IgniteDiffApp/app/utils/storage/storage.test.ts
+@@ -1,5 +1,4 @@
+ import AsyncStorage from "@react-native-community/async-storage"
+-
+ import { load, loadString, save, saveString, clear, remove } from "./storage"
+ 
+ // fixtures
+diff --git a/IgniteDiffApp/babel.config.js b/IgniteDiffApp/babel.config.js
+index ceacb2b..5d82a08 100644
+--- a/IgniteDiffApp/babel.config.js
++++ b/IgniteDiffApp/babel.config.js
+@@ -1,5 +1,5 @@
+ module.exports = {
+-  presets: ["module:metro-react-native-babel-preset"],
++  presets: ["module:metro-react-native-babel-preset", "module:react-native-dotenv"],
+   env: {
+     production: {},
+   },
+diff --git a/IgniteDiffApp/ignite/ignite.json b/IgniteDiffApp/ignite/ignite.json
+index 4ad3d16..6c5b885 100644
+--- a/IgniteDiffApp/ignite/ignite.json
++++ b/IgniteDiffApp/ignite/ignite.json
+@@ -1,7 +1,6 @@
+ {
+-  "navigation": "react-navigation",
+   "generators": {},
+-  "createdWith": "3.5.1",
++  "createdWith": "3.1.6",
+   "boilerplate": "ignite-bowser",
+-  "boilerplateVersion": "4.14.2"
++  "boilerplateVersion": "4.7.5"
+ }
+\ No newline at end of file
+diff --git a/IgniteDiffApp/index.js b/IgniteDiffApp/index.js
+index 7d7bb43..461a75b 100644
+--- a/IgniteDiffApp/index.js
++++ b/IgniteDiffApp/index.js
+@@ -7,24 +7,5 @@
+ // side effect of breaking other tooling like mobile-center and react-native-rename.
+ //
+ // It's easier just to leave it here.
+-import App from "./app/app.tsx"
+-import { AppRegistry } from "react-native"
+ 
+-/**
+- * This needs to match what's found in your app_delegate.m and MainActivity.java.
+- */
+-const APP_NAME = "IgniteDiffApp"
+-
+-// Should we show storybook instead of our app?
+-//
+-// ⚠️ Leave this as `false` when checking into git.
+-const SHOW_STORYBOOK = false
+-
+-let RootComponent = App
+-if (__DEV__ && SHOW_STORYBOOK) {
+-  // Only include Storybook if we're in dev mode
+-  const { StorybookUIRoot } = require("./storybook")
+-  RootComponent = StorybookUIRoot
+-}
+-
+-AppRegistry.registerComponent(APP_NAME, () => RootComponent)
++import "./app/app.tsx"
+diff --git a/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj b/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
+index c72d798..d3cf3f2 100644
+--- a/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
++++ b/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
+@@ -5,39 +5,38 @@
+ 	};
+ 	objectVersion = 46;
+ 	objects = {
+-
+ /* Begin PBXBuildFile section */
+ 		00E356F31AD99517003FC87E /* IgniteDiffAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* IgniteDiffAppTests.m */; };
+ 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+ 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
+ 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+-		25BC1D7DAE136F754CFAB11E /* libPods-IgniteDiffApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5851452308E3D0C8D6C2249B /* libPods-IgniteDiffApp-tvOS.a */; };
++		275354F991E8457F453F091A /* libPods-IgniteDiffApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 686B935CFE5CBAC2D4496C95 /* libPods-IgniteDiffApp.a */; };
+ 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+ 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+ 		2DCD954D1E0B4F2C00145EB5 /* IgniteDiffAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* IgniteDiffAppTests.m */; };
+-		3FD50DEFD46E4E872573C2D6 /* libPods-IgniteDiffApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1003E1940D84C81D6E381BF /* libPods-IgniteDiffApp.a */; };
+-		45CB50FBE574C70852ADA157 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72B2DFD5C07A5FA76EC4A6E4 /* libPods-IgniteDiffApp-tvOSTests.a */; };
+-		625CC957966BF59DFBBBA61B /* libPods-IgniteDiffAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 865AD6E32A39A2ED9A0E8203 /* libPods-IgniteDiffAppTests.a */; };
+-		962CA12D8DEA413B8DADACDA /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8B511652F314D608C0045DD /* Montserrat-Black.ttf */; };
+-		291B42BADE09467B9C5BEB19 /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45DE80E1F7474E4B9606B6CE /* Montserrat-BlackItalic.ttf */; };
+-		7279DAD5C71A40519CBA5816 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 193BBD53B1CB4444A5A93C04 /* Montserrat-Bold.ttf */; };
+-		B31118E44ED74AF19B6E65CD /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4ABA6C030AD1449CAD534C8F /* Montserrat-BoldItalic.ttf */; };
+-		01DDE898BBDF4D869E1AD960 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F3F88D07A8146838D1F5337 /* Montserrat-ExtraBold.ttf */; };
+-		B230BDF8A23A4F588F2F085A /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BF2FE101163463AAA536FCB /* Montserrat-ExtraBoldItalic.ttf */; };
+-		137D9F261D8C4664BD4DA6AE /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5442799F8984E68980DF0D7 /* Montserrat-ExtraLight.ttf */; };
+-		E6566B7206D14788AD2B2947 /* Montserrat-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0BF6E64AAB8441F1A9CF748D /* Montserrat-ExtraLightItalic.ttf */; };
+-		C5D8D70135D54EFBB822B096 /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EB77342E327416484C55B8A /* Montserrat-Italic.ttf */; };
+-		0D107218164748FCA9039521 /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A735FA21799040AA9EC914DE /* Montserrat-Light.ttf */; };
+-		93797E07BFED49C1886346CE /* Montserrat-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F7FEB775B37418D90074154 /* Montserrat-LightItalic.ttf */; };
+-		D0FE37C79E2B498983DE8B48 /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61C9F2C93E7D476F8A5D29C1 /* Montserrat-Medium.ttf */; };
+-		8F353DD12DFD4B8487DBF0E0 /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A02109D8B704D6AA71584DB /* Montserrat-MediumItalic.ttf */; };
+-		E4A75944BF7746B6B4C18735 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F710AF3BB8B4F16BF08F7ED /* Montserrat-Regular.ttf */; };
+-		82A8A46D2B7547EE96CAA814 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EAADF298B59F4C9BB49FC12D /* Montserrat-SemiBold.ttf */; };
+-		0C93F68F0B9A43D4B7BD6718 /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9AEC97C5677149528222C5D9 /* Montserrat-SemiBoldItalic.ttf */; };
+-		0BF53623D2464EE1B02D89FE /* Montserrat-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DFE7923557134CEE84E528C1 /* Montserrat-Thin.ttf */; };
+-		78B8A3C2BDC54EB0AA44121B /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 831953B6292F4A2FBE549C3C /* Montserrat-ThinItalic.ttf */; };
++		6298DF128A88B59C2469EB10 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EDA231D02596D893F9BFC64 /* libPods-IgniteDiffApp-tvOSTests.a */; };
++		62A167161A1D1699798899B6 /* libPods-IgniteDiffAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 116BB0DA5D23981FEAC23985 /* libPods-IgniteDiffAppTests.a */; };
++		A03FD951463FB4F45C093AB4 /* libPods-IgniteDiffApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BEF9DD9D8F07B6604A3C7FA /* libPods-IgniteDiffApp-tvOS.a */; };
++		15E0F91E880B4011BC305627 /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07CB4EF3E3D0414CAF39E22D /* Montserrat-Black.ttf */; };
++		41D21FF9D0AD4F90BBA9612F /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F82D5AC7F03045DBAE61FCAC /* Montserrat-BlackItalic.ttf */; };
++		9CE9253992CD40BB89D0AB6A /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 82EF454D0D6649C285DFCFB9 /* Montserrat-Bold.ttf */; };
++		E4233D2E6F494DF6A36E13EF /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA45BBE5B1D247C08EC16A29 /* Montserrat-BoldItalic.ttf */; };
++		582045F9852449739C821C33 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C267AC49C4F24F409831CC01 /* Montserrat-ExtraBold.ttf */; };
++		FAE685DB5F07436B871982AE /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D15D126D7B24A99844C05A4 /* Montserrat-ExtraBoldItalic.ttf */; };
++		359CCCD89B8147378BF77820 /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DBFA3B50E60A49C9878B83FD /* Montserrat-ExtraLight.ttf */; };
++		203DBDAEDAC9439E84834A0F /* Montserrat-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31FFE600D3AF43AEAB909F5B /* Montserrat-ExtraLightItalic.ttf */; };
++		F15D5DDC69BF4620A57087F2 /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05B98EB61BE24CC09C7C0AD8 /* Montserrat-Italic.ttf */; };
++		9717E3F7E8DD4C5386552BFE /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F001BF5A3BE24E60A7F4C037 /* Montserrat-Light.ttf */; };
++		CBF08F377B4C4DABA3A2B31F /* Montserrat-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51C861F5512043B997B52DBF /* Montserrat-LightItalic.ttf */; };
++		BFABE33D0A634018B8C8DD15 /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88D9C490CC4844319F893E17 /* Montserrat-Medium.ttf */; };
++		E9AA311B315D4BB49786D91B /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23B24B371A80434A98CDEEA0 /* Montserrat-MediumItalic.ttf */; };
++		ED9ADE429D7D4EACA53E7F3C /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D73254432AD94710863B9947 /* Montserrat-Regular.ttf */; };
++		1635CA37B1284B7791B3EA16 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A2C0E66B09A47BFBA8F2C04 /* Montserrat-SemiBold.ttf */; };
++		9AC0FCF078974C57A0BE5DDF /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BC5B03C667BA415E888312DD /* Montserrat-SemiBoldItalic.ttf */; };
++		4D8DCA80E12D438A9DCF9958 /* Montserrat-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 059CED485FE34963A06CD40D /* Montserrat-Thin.ttf */; };
++		1466E6CE0D7F4A76A49913D8 /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6662A3B5F624306AC989A4D /* Montserrat-ThinItalic.ttf */; };
+ /* End PBXBuildFile section */
+ 
+ /* Begin PBXContainerItemProxy section */
+@@ -62,6 +61,7 @@
+ 		00E356EE1AD99517003FC87E /* IgniteDiffAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IgniteDiffAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+ 		00E356F21AD99517003FC87E /* IgniteDiffAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IgniteDiffAppTests.m; sourceTree = "<group>"; };
++		116BB0DA5D23981FEAC23985 /* libPods-IgniteDiffAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		13B07F961A680F5B00A75B9A /* IgniteDiffApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IgniteDiffApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = IgniteDiffApp/AppDelegate.h; sourceTree = "<group>"; };
+ 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = IgniteDiffApp/AppDelegate.m; sourceTree = "<group>"; };
+@@ -69,40 +69,39 @@
+ 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = IgniteDiffApp/Images.xcassets; sourceTree = "<group>"; };
+ 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = IgniteDiffApp/Info.plist; sourceTree = "<group>"; };
+ 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = IgniteDiffApp/main.m; sourceTree = "<group>"; };
+-		20ECFE6526243897CB418321 /* Pods-IgniteDiffApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.debug.xcconfig"; sourceTree = "<group>"; };
++		17FB4CBF4144823EC1D3DBA9 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+ 		2D02E47B1E0B4A5D006451C7 /* IgniteDiffApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IgniteDiffApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		2D02E4901E0B4A5D006451C7 /* IgniteDiffApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IgniteDiffApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		5851452308E3D0C8D6C2249B /* libPods-IgniteDiffApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		599C7B88DD4ED60F99B3F9B1 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+-		5DA303E0E4EAA5868C89E56B /* Pods-IgniteDiffAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+-		66151B531F1CCE5358BD5E23 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+-		6B7E04127FDF786E50694463 /* Pods-IgniteDiffAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.release.xcconfig"; sourceTree = "<group>"; };
+-		72B2DFD5C07A5FA76EC4A6E4 /* libPods-IgniteDiffApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		865AD6E32A39A2ED9A0E8203 /* libPods-IgniteDiffAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		AA6A05E67D841AFDBDC3FC34 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+-		BA18724103026A0D9579C292 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+-		CD9E795815057F57DE4D2C61 /* Pods-IgniteDiffApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.release.xcconfig"; sourceTree = "<group>"; };
+-		D1003E1940D84C81D6E381BF /* libPods-IgniteDiffApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		33525F307589BF90A47EA35E /* Pods-IgniteDiffAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.debug.xcconfig"; sourceTree = "<group>"; };
++		336BEC7458FEB56B8C970623 /* Pods-IgniteDiffApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.debug.xcconfig"; sourceTree = "<group>"; };
++		644EC0B89356270FFB7F4CC7 /* Pods-IgniteDiffAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.release.xcconfig"; sourceTree = "<group>"; };
++		686B935CFE5CBAC2D4496C95 /* libPods-IgniteDiffApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		7EDA231D02596D893F9BFC64 /* libPods-IgniteDiffApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		89DBF890EB2ACC477676F4E0 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
++		8BEF9DD9D8F07B6604A3C7FA /* libPods-IgniteDiffApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		A0877AE861D47136EEFC4FEC /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
++		BFD8607DCD3BD3B17F3233D9 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
++		C77AF5478DADAD03D201D868 /* Pods-IgniteDiffApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.release.xcconfig"; sourceTree = "<group>"; };
+ 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+ 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+-		D8B511652F314D608C0045DD /* Montserrat-Black.ttf */ = {isa = PBXFileReference; name = "Montserrat-Black.ttf"; path = "../app/theme/fonts/Montserrat-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		45DE80E1F7474E4B9606B6CE /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BlackItalic.ttf"; path = "../app/theme/fonts/Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		193BBD53B1CB4444A5A93C04 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; name = "Montserrat-Bold.ttf"; path = "../app/theme/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		4ABA6C030AD1449CAD534C8F /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		0F3F88D07A8146838D1F5337 /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraBold.ttf"; path = "../app/theme/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		7BF2FE101163463AAA536FCB /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraBoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		F5442799F8984E68980DF0D7 /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraLight.ttf"; path = "../app/theme/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		0BF6E64AAB8441F1A9CF748D /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraLightItalic.ttf"; path = "../app/theme/fonts/Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		9EB77342E327416484C55B8A /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; name = "Montserrat-Italic.ttf"; path = "../app/theme/fonts/Montserrat-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		A735FA21799040AA9EC914DE /* Montserrat-Light.ttf */ = {isa = PBXFileReference; name = "Montserrat-Light.ttf"; path = "../app/theme/fonts/Montserrat-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		8F7FEB775B37418D90074154 /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-LightItalic.ttf"; path = "../app/theme/fonts/Montserrat-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		61C9F2C93E7D476F8A5D29C1 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; name = "Montserrat-Medium.ttf"; path = "../app/theme/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		1A02109D8B704D6AA71584DB /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-MediumItalic.ttf"; path = "../app/theme/fonts/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		4F710AF3BB8B4F16BF08F7ED /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; name = "Montserrat-Regular.ttf"; path = "../app/theme/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		EAADF298B59F4C9BB49FC12D /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBold.ttf"; path = "../app/theme/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		9AEC97C5677149528222C5D9 /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		DFE7923557134CEE84E528C1 /* Montserrat-Thin.ttf */ = {isa = PBXFileReference; name = "Montserrat-Thin.ttf"; path = "../app/theme/fonts/Montserrat-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		831953B6292F4A2FBE549C3C /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ThinItalic.ttf"; path = "../app/theme/fonts/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		07CB4EF3E3D0414CAF39E22D /* Montserrat-Black.ttf */ = {isa = PBXFileReference; name = "Montserrat-Black.ttf"; path = "../app/theme/fonts/Montserrat-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		F82D5AC7F03045DBAE61FCAC /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BlackItalic.ttf"; path = "../app/theme/fonts/Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		82EF454D0D6649C285DFCFB9 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; name = "Montserrat-Bold.ttf"; path = "../app/theme/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		FA45BBE5B1D247C08EC16A29 /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		C267AC49C4F24F409831CC01 /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraBold.ttf"; path = "../app/theme/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		5D15D126D7B24A99844C05A4 /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraBoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		DBFA3B50E60A49C9878B83FD /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraLight.ttf"; path = "../app/theme/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		31FFE600D3AF43AEAB909F5B /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraLightItalic.ttf"; path = "../app/theme/fonts/Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		05B98EB61BE24CC09C7C0AD8 /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; name = "Montserrat-Italic.ttf"; path = "../app/theme/fonts/Montserrat-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		F001BF5A3BE24E60A7F4C037 /* Montserrat-Light.ttf */ = {isa = PBXFileReference; name = "Montserrat-Light.ttf"; path = "../app/theme/fonts/Montserrat-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		51C861F5512043B997B52DBF /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-LightItalic.ttf"; path = "../app/theme/fonts/Montserrat-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		88D9C490CC4844319F893E17 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; name = "Montserrat-Medium.ttf"; path = "../app/theme/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		23B24B371A80434A98CDEEA0 /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-MediumItalic.ttf"; path = "../app/theme/fonts/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		D73254432AD94710863B9947 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; name = "Montserrat-Regular.ttf"; path = "../app/theme/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		9A2C0E66B09A47BFBA8F2C04 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBold.ttf"; path = "../app/theme/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		BC5B03C667BA415E888312DD /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		059CED485FE34963A06CD40D /* Montserrat-Thin.ttf */ = {isa = PBXFileReference; name = "Montserrat-Thin.ttf"; path = "../app/theme/fonts/Montserrat-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		D6662A3B5F624306AC989A4D /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ThinItalic.ttf"; path = "../app/theme/fonts/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+ /* End PBXFileReference section */
+ 
+ /* Begin PBXFrameworksBuildPhase section */
+@@ -110,7 +109,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				625CC957966BF59DFBBBA61B /* libPods-IgniteDiffAppTests.a in Frameworks */,
++				62A167161A1D1699798899B6 /* libPods-IgniteDiffAppTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -118,7 +117,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				3FD50DEFD46E4E872573C2D6 /* libPods-IgniteDiffApp.a in Frameworks */,
++				275354F991E8457F453F091A /* libPods-IgniteDiffApp.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -126,7 +125,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				25BC1D7DAE136F754CFAB11E /* libPods-IgniteDiffApp-tvOS.a in Frameworks */,
++				A03FD951463FB4F45C093AB4 /* libPods-IgniteDiffApp-tvOS.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -134,7 +133,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				45CB50FBE574C70852ADA157 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */,
++				6298DF128A88B59C2469EB10 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -158,6 +157,22 @@
+ 			name = "Supporting Files";
+ 			sourceTree = "<group>";
+ 		};
++		0CB26BA81D927CE86262A233 /* Pods */ = {
++			isa = PBXGroup;
++			children = (
++				336BEC7458FEB56B8C970623 /* Pods-IgniteDiffApp.debug.xcconfig */,
++				C77AF5478DADAD03D201D868 /* Pods-IgniteDiffApp.release.xcconfig */,
++				A0877AE861D47136EEFC4FEC /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */,
++				89DBF890EB2ACC477676F4E0 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */,
++				17FB4CBF4144823EC1D3DBA9 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */,
++				BFD8607DCD3BD3B17F3233D9 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */,
++				33525F307589BF90A47EA35E /* Pods-IgniteDiffAppTests.debug.xcconfig */,
++				644EC0B89356270FFB7F4CC7 /* Pods-IgniteDiffAppTests.release.xcconfig */,
++			);
++			name = Pods;
++			path = Pods;
++			sourceTree = "<group>";
++		};
+ 		13B07FAE1A68108700A75B9A /* IgniteDiffApp */ = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -177,10 +192,10 @@
+ 			children = (
+ 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+ 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
+-				D1003E1940D84C81D6E381BF /* libPods-IgniteDiffApp.a */,
+-				5851452308E3D0C8D6C2249B /* libPods-IgniteDiffApp-tvOS.a */,
+-				72B2DFD5C07A5FA76EC4A6E4 /* libPods-IgniteDiffApp-tvOSTests.a */,
+-				865AD6E32A39A2ED9A0E8203 /* libPods-IgniteDiffAppTests.a */,
++				686B935CFE5CBAC2D4496C95 /* libPods-IgniteDiffApp.a */,
++				8BEF9DD9D8F07B6604A3C7FA /* libPods-IgniteDiffApp-tvOS.a */,
++				7EDA231D02596D893F9BFC64 /* libPods-IgniteDiffApp-tvOSTests.a */,
++				116BB0DA5D23981FEAC23985 /* libPods-IgniteDiffAppTests.a */,
+ 			);
+ 			name = Frameworks;
+ 			sourceTree = "<group>";
+@@ -200,8 +215,8 @@
+ 				00E356EF1AD99517003FC87E /* IgniteDiffAppTests */,
+ 				83CBBA001A601CBA00E9B192 /* Products */,
+ 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+-				9A56DD5BCC2C2A3673DAEEAB /* Pods */,
+-				C270F2E90C6444048476E98E /* Resources */,
++				0CB26BA81D927CE86262A233 /* Pods */,
++				8047D0D13DB6447EA3A56CE2 /* Resources */,
+ 			);
+ 			indentWidth = 2;
+ 			sourceTree = "<group>";
+@@ -219,43 +234,27 @@
+ 			name = Products;
+ 			sourceTree = "<group>";
+ 		};
+-		9A56DD5BCC2C2A3673DAEEAB /* Pods */ = {
+-			isa = PBXGroup;
+-			children = (
+-				20ECFE6526243897CB418321 /* Pods-IgniteDiffApp.debug.xcconfig */,
+-				CD9E795815057F57DE4D2C61 /* Pods-IgniteDiffApp.release.xcconfig */,
+-				AA6A05E67D841AFDBDC3FC34 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */,
+-				599C7B88DD4ED60F99B3F9B1 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */,
+-				66151B531F1CCE5358BD5E23 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */,
+-				BA18724103026A0D9579C292 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */,
+-				5DA303E0E4EAA5868C89E56B /* Pods-IgniteDiffAppTests.debug.xcconfig */,
+-				6B7E04127FDF786E50694463 /* Pods-IgniteDiffAppTests.release.xcconfig */,
+-			);
+-			name = Pods;
+-			path = Pods;
+-			sourceTree = "<group>";
+-		};
+-		C270F2E90C6444048476E98E /* Resources */ = {
++		8047D0D13DB6447EA3A56CE2 /* Resources */ = {
+ 			isa = "PBXGroup";
+ 			children = (
+-				D8B511652F314D608C0045DD /* Montserrat-Black.ttf */,
+-				45DE80E1F7474E4B9606B6CE /* Montserrat-BlackItalic.ttf */,
+-				193BBD53B1CB4444A5A93C04 /* Montserrat-Bold.ttf */,
+-				4ABA6C030AD1449CAD534C8F /* Montserrat-BoldItalic.ttf */,
+-				0F3F88D07A8146838D1F5337 /* Montserrat-ExtraBold.ttf */,
+-				7BF2FE101163463AAA536FCB /* Montserrat-ExtraBoldItalic.ttf */,
+-				F5442799F8984E68980DF0D7 /* Montserrat-ExtraLight.ttf */,
+-				0BF6E64AAB8441F1A9CF748D /* Montserrat-ExtraLightItalic.ttf */,
+-				9EB77342E327416484C55B8A /* Montserrat-Italic.ttf */,
+-				A735FA21799040AA9EC914DE /* Montserrat-Light.ttf */,
+-				8F7FEB775B37418D90074154 /* Montserrat-LightItalic.ttf */,
+-				61C9F2C93E7D476F8A5D29C1 /* Montserrat-Medium.ttf */,
+-				1A02109D8B704D6AA71584DB /* Montserrat-MediumItalic.ttf */,
+-				4F710AF3BB8B4F16BF08F7ED /* Montserrat-Regular.ttf */,
+-				EAADF298B59F4C9BB49FC12D /* Montserrat-SemiBold.ttf */,
+-				9AEC97C5677149528222C5D9 /* Montserrat-SemiBoldItalic.ttf */,
+-				DFE7923557134CEE84E528C1 /* Montserrat-Thin.ttf */,
+-				831953B6292F4A2FBE549C3C /* Montserrat-ThinItalic.ttf */,
++				07CB4EF3E3D0414CAF39E22D /* Montserrat-Black.ttf */,
++				F82D5AC7F03045DBAE61FCAC /* Montserrat-BlackItalic.ttf */,
++				82EF454D0D6649C285DFCFB9 /* Montserrat-Bold.ttf */,
++				FA45BBE5B1D247C08EC16A29 /* Montserrat-BoldItalic.ttf */,
++				C267AC49C4F24F409831CC01 /* Montserrat-ExtraBold.ttf */,
++				5D15D126D7B24A99844C05A4 /* Montserrat-ExtraBoldItalic.ttf */,
++				DBFA3B50E60A49C9878B83FD /* Montserrat-ExtraLight.ttf */,
++				31FFE600D3AF43AEAB909F5B /* Montserrat-ExtraLightItalic.ttf */,
++				05B98EB61BE24CC09C7C0AD8 /* Montserrat-Italic.ttf */,
++				F001BF5A3BE24E60A7F4C037 /* Montserrat-Light.ttf */,
++				51C861F5512043B997B52DBF /* Montserrat-LightItalic.ttf */,
++				88D9C490CC4844319F893E17 /* Montserrat-Medium.ttf */,
++				23B24B371A80434A98CDEEA0 /* Montserrat-MediumItalic.ttf */,
++				D73254432AD94710863B9947 /* Montserrat-Regular.ttf */,
++				9A2C0E66B09A47BFBA8F2C04 /* Montserrat-SemiBold.ttf */,
++				BC5B03C667BA415E888312DD /* Montserrat-SemiBoldItalic.ttf */,
++				059CED485FE34963A06CD40D /* Montserrat-Thin.ttf */,
++				D6662A3B5F624306AC989A4D /* Montserrat-ThinItalic.ttf */,
+ 			);
+ 			name = Resources;
+ 			sourceTree = "<group>";
+@@ -268,7 +267,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "IgniteDiffAppTests" */;
+ 			buildPhases = (
+-				474BEE8B14ADDF053B3B177D /* [CP] Check Pods Manifest.lock */,
++				00FD611269A56D091B7C82E2 /* [CP] Check Pods Manifest.lock */,
+ 				00E356EA1AD99517003FC87E /* Sources */,
+ 				00E356EB1AD99517003FC87E /* Frameworks */,
+ 				00E356EC1AD99517003FC87E /* Resources */,
+@@ -287,7 +286,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "IgniteDiffApp" */;
+ 			buildPhases = (
+-				B82A745A444133198BC5E38E /* [CP] Check Pods Manifest.lock */,
++				47D657478223E4353C682D44 /* [CP] Check Pods Manifest.lock */,
+ 				FD10A7F022414F080027D42C /* Start Packager */,
+ 				13B07F871A680F5B00A75B9A /* Sources */,
+ 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+@@ -307,7 +306,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "IgniteDiffApp-tvOS" */;
+ 			buildPhases = (
+-				0A3228AD6F03DBCE67475629 /* [CP] Check Pods Manifest.lock */,
++				194782F160D3CA6244944B34 /* [CP] Check Pods Manifest.lock */,
+ 				FD10A7F122414F3F0027D42C /* Start Packager */,
+ 				2D02E4771E0B4A5D006451C7 /* Sources */,
+ 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
+@@ -327,7 +326,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "IgniteDiffApp-tvOSTests" */;
+ 			buildPhases = (
+-				2E403F63F84AE96EA1C439A0 /* [CP] Check Pods Manifest.lock */,
++				7EE13FAD5D50177910871FE1 /* [CP] Check Pods Manifest.lock */,
+ 				2D02E48C1E0B4A5D006451C7 /* Sources */,
+ 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
+ 				2D02E48E1E0B4A5D006451C7 /* Resources */,
+@@ -401,24 +400,24 @@
+ 			files = (
+ 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+ 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+-				962CA12D8DEA413B8DADACDA /* Montserrat-Black.ttf in Resources */,
+-				291B42BADE09467B9C5BEB19 /* Montserrat-BlackItalic.ttf in Resources */,
+-				7279DAD5C71A40519CBA5816 /* Montserrat-Bold.ttf in Resources */,
+-				B31118E44ED74AF19B6E65CD /* Montserrat-BoldItalic.ttf in Resources */,
+-				01DDE898BBDF4D869E1AD960 /* Montserrat-ExtraBold.ttf in Resources */,
+-				B230BDF8A23A4F588F2F085A /* Montserrat-ExtraBoldItalic.ttf in Resources */,
+-				137D9F261D8C4664BD4DA6AE /* Montserrat-ExtraLight.ttf in Resources */,
+-				E6566B7206D14788AD2B2947 /* Montserrat-ExtraLightItalic.ttf in Resources */,
+-				C5D8D70135D54EFBB822B096 /* Montserrat-Italic.ttf in Resources */,
+-				0D107218164748FCA9039521 /* Montserrat-Light.ttf in Resources */,
+-				93797E07BFED49C1886346CE /* Montserrat-LightItalic.ttf in Resources */,
+-				D0FE37C79E2B498983DE8B48 /* Montserrat-Medium.ttf in Resources */,
+-				8F353DD12DFD4B8487DBF0E0 /* Montserrat-MediumItalic.ttf in Resources */,
+-				E4A75944BF7746B6B4C18735 /* Montserrat-Regular.ttf in Resources */,
+-				82A8A46D2B7547EE96CAA814 /* Montserrat-SemiBold.ttf in Resources */,
+-				0C93F68F0B9A43D4B7BD6718 /* Montserrat-SemiBoldItalic.ttf in Resources */,
+-				0BF53623D2464EE1B02D89FE /* Montserrat-Thin.ttf in Resources */,
+-				78B8A3C2BDC54EB0AA44121B /* Montserrat-ThinItalic.ttf in Resources */,
++				15E0F91E880B4011BC305627 /* Montserrat-Black.ttf in Resources */,
++				41D21FF9D0AD4F90BBA9612F /* Montserrat-BlackItalic.ttf in Resources */,
++				9CE9253992CD40BB89D0AB6A /* Montserrat-Bold.ttf in Resources */,
++				E4233D2E6F494DF6A36E13EF /* Montserrat-BoldItalic.ttf in Resources */,
++				582045F9852449739C821C33 /* Montserrat-ExtraBold.ttf in Resources */,
++				FAE685DB5F07436B871982AE /* Montserrat-ExtraBoldItalic.ttf in Resources */,
++				359CCCD89B8147378BF77820 /* Montserrat-ExtraLight.ttf in Resources */,
++				203DBDAEDAC9439E84834A0F /* Montserrat-ExtraLightItalic.ttf in Resources */,
++				F15D5DDC69BF4620A57087F2 /* Montserrat-Italic.ttf in Resources */,
++				9717E3F7E8DD4C5386552BFE /* Montserrat-Light.ttf in Resources */,
++				CBF08F377B4C4DABA3A2B31F /* Montserrat-LightItalic.ttf in Resources */,
++				BFABE33D0A634018B8C8DD15 /* Montserrat-Medium.ttf in Resources */,
++				E9AA311B315D4BB49786D91B /* Montserrat-MediumItalic.ttf in Resources */,
++				ED9ADE429D7D4EACA53E7F3C /* Montserrat-Regular.ttf in Resources */,
++				1635CA37B1284B7791B3EA16 /* Montserrat-SemiBold.ttf in Resources */,
++				9AC0FCF078974C57A0BE5DDF /* Montserrat-SemiBoldItalic.ttf in Resources */,
++				4D8DCA80E12D438A9DCF9958 /* Montserrat-Thin.ttf in Resources */,
++				1466E6CE0D7F4A76A49913D8 /* Montserrat-ThinItalic.ttf in Resources */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -454,7 +453,7 @@
+ 			shellPath = /bin/sh;
+ 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+ 		};
+-		0A3228AD6F03DBCE67475629 /* [CP] Check Pods Manifest.lock */ = {
++		00FD611269A56D091B7C82E2 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -469,50 +468,50 @@
+ 			outputFileListPaths = (
+ 			);
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-tvOS-checkManifestLockResult.txt",
++				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffAppTests-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
++		194782F160D3CA6244944B34 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+ 			);
++			inputFileListPaths = (
++			);
+ 			inputPaths = (
++				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
++				"${PODS_ROOT}/Manifest.lock",
++			);
++			name = "[CP] Check Pods Manifest.lock";
++			outputFileListPaths = (
+ 			);
+-			name = "Bundle React Native Code And Images";
+ 			outputPaths = (
++				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-tvOS-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
++			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
++			showEnvVarsInLog = 0;
+ 		};
+-		2E403F63F84AE96EA1C439A0 /* [CP] Check Pods Manifest.lock */ = {
++		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+ 			);
+-			inputFileListPaths = (
+-			);
+ 			inputPaths = (
+-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+-				"${PODS_ROOT}/Manifest.lock",
+-			);
+-			name = "[CP] Check Pods Manifest.lock";
+-			outputFileListPaths = (
+ 			);
++			name = "Bundle React Native Code And Images";
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-tvOSTests-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+-			showEnvVarsInLog = 0;
++			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+ 		};
+-		474BEE8B14ADDF053B3B177D /* [CP] Check Pods Manifest.lock */ = {
++		47D657478223E4353C682D44 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -527,14 +526,14 @@
+ 			outputFileListPaths = (
+ 			);
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffAppTests-checkManifestLockResult.txt",
++				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		B82A745A444133198BC5E38E /* [CP] Check Pods Manifest.lock */ = {
++		7EE13FAD5D50177910871FE1 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -549,7 +548,7 @@
+ 			outputFileListPaths = (
+ 			);
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-checkManifestLockResult.txt",
++				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-tvOSTests-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+@@ -661,7 +660,7 @@
+ /* Begin XCBuildConfiguration section */
+ 		00E356F61AD99517003FC87E /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 5DA303E0E4EAA5868C89E56B /* Pods-IgniteDiffAppTests.debug.xcconfig */;
++			baseConfigurationReference = 33525F307589BF90A47EA35E /* Pods-IgniteDiffAppTests.debug.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				GCC_PREPROCESSOR_DEFINITIONS = (
+@@ -684,7 +683,7 @@
+ 		};
+ 		00E356F71AD99517003FC87E /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 6B7E04127FDF786E50694463 /* Pods-IgniteDiffAppTests.release.xcconfig */;
++			baseConfigurationReference = 644EC0B89356270FFB7F4CC7 /* Pods-IgniteDiffAppTests.release.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				COPY_PHASE_STRIP = NO;
+@@ -704,7 +703,7 @@
+ 		};
+ 		13B07F941A680F5B00A75B9A /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 20ECFE6526243897CB418321 /* Pods-IgniteDiffApp.debug.xcconfig */;
++			baseConfigurationReference = 336BEC7458FEB56B8C970623 /* Pods-IgniteDiffApp.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CURRENT_PROJECT_VERSION = 1;
+@@ -724,7 +723,7 @@
+ 		};
+ 		13B07F951A680F5B00A75B9A /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = CD9E795815057F57DE4D2C61 /* Pods-IgniteDiffApp.release.xcconfig */;
++			baseConfigurationReference = C77AF5478DADAD03D201D868 /* Pods-IgniteDiffApp.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CURRENT_PROJECT_VERSION = 1;
+@@ -743,7 +742,7 @@
+ 		};
+ 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = AA6A05E67D841AFDBDC3FC34 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */;
++			baseConfigurationReference = A0877AE861D47136EEFC4FEC /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+@@ -771,7 +770,7 @@
+ 		};
+ 		2D02E4981E0B4A5E006451C7 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 599C7B88DD4ED60F99B3F9B1 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */;
++			baseConfigurationReference = 89DBF890EB2ACC477676F4E0 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+@@ -799,7 +798,7 @@
+ 		};
+ 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 66151B531F1CCE5358BD5E23 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */;
++			baseConfigurationReference = 17FB4CBF4144823EC1D3DBA9 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+@@ -826,7 +825,7 @@
+ 		};
+ 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = BA18724103026A0D9579C292 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */;
++			baseConfigurationReference = BFD8607DCD3BD3B17F3233D9 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+diff --git a/IgniteDiffApp/package.json b/IgniteDiffApp/package.json
+index 0dc1387..7731df1 100644
+--- a/IgniteDiffApp/package.json
++++ b/IgniteDiffApp/package.json
+@@ -14,62 +14,59 @@
+     "ci:build:e2e": "detox build -c ios.sim.release",
+     "compile": "tsc --noEmit -p . --pretty",
+     "format": "npm-run-all format:*",
+-    "format:js": "prettier --write '**/*.js'",
+-    "format:json": "prettier --write '**/*.json'",
+-    "format:md": "prettier --write '**/*.md'",
+-    "format:ts": "prettier --write '**/*.ts{,x}'",
++    "format:js": "prettier --write {.,**}/*.js",
++    "format:json": "prettier --write {.,**}/*.json",
++    "format:md": "prettier --write {.,**}/*.md",
++    "format:ts": "prettier --write {.,**}/*.{ts,tsx}",
+     "hack:types-react-navigation": "rimraf node_modules/@types/react-navigation/node_modules/@types",
+     "hack:types-react-native": "rimraf node_modules/@types/react-native/node_modules/@types",
+     "hack:types-react-test-renderer": "rimraf node_modules/@types/react-test-renderer/node_modules/@types",
+     "patch": "patch-package",
+     "postinstall": "node ./bin/postInstall",
+     "prepare": "npm-run-all patch hack:*",
+-    "storybook": "start-storybook -p 9001 -c ./storybook",
++    "storybook": "storybook start -p 9001 --skip-packager",
+     "adb": "adb reverse tcp:9090 tcp:9090 && adb reverse tcp:3000 tcp:3000 && adb reverse tcp:9001 tcp:9001 && adb reverse tcp:8081 tcp:8081"
+   },
+   "dependencies": {
+     "@react-native-community/async-storage": "^1.5.1",
+-    "@react-native-community/masked-view": "0.1.5",
+     "apisauce": "1.0.3",
+     "i18n-js": "^3.0.11",
+     "lodash.throttle": "4.1.1",
+     "mobx": "^4.13.0",
+-    "mobx-react-lite": "^1.4.1",
++    "mobx-react": "^6.1.1",
+     "mobx-state-tree": "^3.14.1",
+     "ramda": "0.26.1",
+     "react": "16.9.0",
+     "react-native": "0.61.2",
+-    "react-native-gesture-handler": "^1.5.0",
++    "react-native-gesture-handler": "^1.3.0",
+     "react-native-keychain": "3.1.3",
+     "react-native-localize": "^1.0.0",
+-    "react-native-safe-area-context": "0.6.2",
+-    "react-native-safe-area-view": "1.0.0",
+-    "react-native-screens": "^2.0.0-alpha.17",
+     "react-native-splash-screen": "3.1.1",
+-    "react-navigation": "4.0.10",
+-    "react-navigation-stack": "2.0.9",
++    "react-navigation": "3.11.1",
+     "reactotron-mst": "^3.1.1",
+     "reactotron-react-native": "^4.0.0-beta.1",
+     "validate.js": "0.13.1"
+   },
+   "devDependencies": {
+-    "@babel/core": "^7.9.0",
++    "@babel/core": "^7.6.4",
+     "@babel/plugin-proposal-decorators": "^7.0.0",
+     "@babel/plugin-proposal-optional-catch-binding": "^7.0.0",
+-    "@babel/runtime": "^7.9.2",
+-    "@storybook/addon-storyshots": "5.2.8",
+-    "@storybook/react-native": "5.2.8",
+-    "@storybook/react-native-server": "5.2.8",
++    "@babel/runtime": "^7.6.3",
++    "@emotion/core": "^10.0.15",
++    "@storybook/addon-storyshots": "5.1.11",
++    "@storybook/react-native": "5.1.11",
+     "@types/jest": "24.0.18",
+     "@types/ramda": "0.26.18",
+     "@types/react": "16.8.24",
+     "@types/react-native": "0.60.19",
++    "@types/react-navigation": "3.0.7",
+     "@types/react-test-renderer": "16.8.3",
+-    "@typescript-eslint/eslint-plugin": "^2.24.0",
+-    "@typescript-eslint/parser": "^2.24.0",
+-    "babel-jest": "^25.2.4",
++    "@typescript-eslint/eslint-plugin": "^1.1.0",
++    "@typescript-eslint/parser": "^1.1.0",
++    "babel-jest": "^24.9.0",
+     "detox": "^14.0.1",
+-    "eslint": "^6.6.0",
++    "emotion-theming": "^10.0.14",
++    "eslint": "^6.5.1",
+     "eslint-config-prettier": "^6.0.0",
+     "eslint-config-standard": "^13.0.1",
+     "eslint-plugin-import": "^2.15.0",
+@@ -78,23 +75,28 @@
+     "eslint-plugin-react": "^7.12.4",
+     "eslint-plugin-react-native": "^3.6.0",
+     "eslint-plugin-standard": "^4.0.0",
+-    "ignite-bowser": "4.14.2",
+-    "jest": "^25.2.4",
++    "ignite-bowser": "4.7.5",
++    "jest": "^24.9.0",
+     "jetifier": "^1.6.1",
+-    "metro-react-native-babel-preset": "^0.59.0",
++    "metro-react-native-babel-preset": "^0.56.0",
+     "npm-run-all": "4.1.5",
+     "patch-package": "6.1.2",
+     "postinstall-prepare": "1.0.1",
+     "prettier": "1.18.2",
+     "react-devtools-core": "3.6.3",
++    "react-native-dotenv": "^0.2.0",
+     "react-powerplug": "1.0.0",
+     "react-test-renderer": "16.9.0",
+     "rimraf": "2.6.3",
+     "solidarity": "2.3.1",
+-    "typescript": "3.8.3"
++    "typescript": "3.5.3"
+   },
+   "jest": {
+     "preset": "react-native",
++    "moduleNameMapper": {
++      "^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp|ttf|otf)$": "RelativeImageStub",
++      "^React$": "<rootDir>/node_modules/react"
++    },
+     "setupFiles": [
+       "<rootDir>/node_modules/react-native/jest/setup.js",
+       "<rootDir>/test/setup.ts"
+@@ -178,7 +180,6 @@
+       "react/prop-types": "off",
+       "react-native/no-raw-text": 0,
+       "space-before-function-paren": 0,
+-      "@typescript-eslint/ban-ts-ignore": 0,
+       "@typescript-eslint/indent": 0,
+       "@typescript-eslint/explicit-member-accessibility": 0,
+       "@typescript-eslint/explicit-function-return-type": 0,
+diff --git a/IgniteDiffApp/storybook/storybook.tsx b/IgniteDiffApp/storybook/storybook.tsx
+index f2e332e..725be9b 100644
+--- a/IgniteDiffApp/storybook/storybook.tsx
++++ b/IgniteDiffApp/storybook/storybook.tsx
+@@ -1,5 +1,6 @@
+ import React, { useEffect } from "react"
+ import { getStorybookUI, configure } from "@storybook/react-native"
++import SplashScreen from "react-native-splash-screen"
+ 
+ declare var module
+ 
+@@ -11,13 +12,12 @@ const StorybookUI = getStorybookUI({ port: 9001, host: "localhost", onDeviceUI:
+ 
+ export const StorybookUIRoot: React.FunctionComponent = () => {
+   useEffect(() => {
+-    ;(async () => {
+-      if (typeof __TEST__ === "undefined" || !__TEST__) {
+-        const Reactotron = require("../app/services/reactotron")
+-        const reactotron = new Reactotron.Reactotron()
+-        reactotron.setup()
+-      }
+-    })()
++    SplashScreen.hide()
++    if (typeof __TEST__ === "undefined" || !__TEST__) {
++      const Reactotron = require("../app/services/reactotron")
++      const reactotron = new Reactotron.Reactotron()
++      reactotron.setup()
++    }
+   }, [])
+ 
+   return <StorybookUI />
+diff --git a/IgniteDiffApp/test/__snapshots__/storyshots.test.ts.snap b/IgniteDiffApp/test/__snapshots__/storyshots.test.ts.snap
+index 28a8a64..c25da26 100644
+--- a/IgniteDiffApp/test/__snapshots__/storyshots.test.ts.snap
++++ b/IgniteDiffApp/test/__snapshots__/storyshots.test.ts.snap
+@@ -2913,7 +2913,7 @@ exports[`Storyshots Header Behavior 1`] = `
+                     <Image
+                       source={
+                         Object {
+-                          "testUri": "../../../app/components/icon/icons/arrow-left.png",
++                          "testUri": "../../../app/components/icon/icons/arrow-left@2x.png",
+                         }
+                       }
+                       style={
+@@ -3108,7 +3108,7 @@ exports[`Storyshots Header Behavior 1`] = `
+                     <Image
+                       source={
+                         Object {
+-                          "testUri": "../../../app/components/icon/icons/bullet.png",
++                          "testUri": "../../../app/components/icon/icons/bullet@2x.png",
+                         }
+                       }
+                       style={
+@@ -3235,7 +3235,7 @@ exports[`Storyshots Icon Names 1`] = `
+               <Image
+                 source={
+                   Object {
+-                    "testUri": "../../../app/components/icon/icons/arrow-left.png",
++                    "testUri": "../../../app/components/icon/icons/arrow-left@2x.png",
+                   }
+                 }
+                 style={
+@@ -3329,7 +3329,7 @@ exports[`Storyshots Icon Names 1`] = `
+               <Image
+                 source={
+                   Object {
+-                    "testUri": "../../../app/components/icon/icons/bullet.png",
++                    "testUri": "../../../app/components/icon/icons/bullet@2x.png",
+                   }
+                 }
+                 style={
+@@ -4281,7 +4281,7 @@ exports[`Storyshots Text Passing Content 1`] = `
+                   }
+                 }
+               >
+-                common.cancel.test
++                omglol.test
+               </Text>
+             </View>
+           </View>
+@@ -5997,7 +5997,7 @@ exports[`Storyshots Wallpaper Style Presets 1`] = `
+             <Image
+               source={
+                 Object {
+-                  "testUri": "../../../app/components/wallpaper/bg.png",
++                  "testUri": "../../../app/components/wallpaper/bg@2x.png",
+                 }
+               }
+               style={
+diff --git a/IgniteDiffApp/test/i18n.test.ts b/IgniteDiffApp/test/i18n.test.ts
+deleted file mode 100644
+index fc373b5..0000000
+--- a/IgniteDiffApp/test/i18n.test.ts
++++ /dev/null
+@@ -1,62 +0,0 @@
+-const en = require("../app/i18n/en.json")
+-const { exec } = require("child_process")
+-
+-// Use this array for keys that for whatever reason aren't greppable so they
+-// don't hold your test suite hostage by always failing.
+-const EXCEPTIONS = [
+-  // "welcomeScreen.readyForLaunch",
+-]
+-
+-/**
+- * This tests your codebase for missing i18n strings so you can avoid error strings at render time
+- *
+- * It was taken from https://gist.github.com/Michaelvilleneuve/8808ba2775536665d95b7577c9d8d5a1
+- * and modified slightly to account for our Bowser higher order components,
+- * which take 'tx' and 'fooTx' props.
+- * The grep command is nasty looking, but it's essentially searching the codebase for 3 things:
+- *
+- * tx="*"
+- * Tx=""
+- * translate(""
+- *
+- * and then grabs the i18n key between the double quotes
+- *
+- * This approach isn't 100% perfect. If you are storing your key string in a variable because you
+- * are setting it conditionally, then it won't be picked up.
+- *
+- */
+-
+-describe("i18n", () => {
+-  test("There are no missing keys", done => {
+-    // Actual command output:
+-    // grep "Tx=\"\S*\"\|tx=\"\S*\"\|translate(\"\S*\"" -ohr './app' | grep -o "\".*\""
+-    const command = `grep "Tx=\\"\\S*\\"\\|tx=\\"\\S*\\"\\|translate(\\"\\S*\\"" -ohr '../app' | grep -o "\\".*\\""`
+-    exec(command, (_, stdout) => {
+-      const allTranslationsDefined = iterate(en, "", [])
+-      const allTranslationsUsed = stdout.replace(new RegExp('"', "g"), "").split("\n")
+-      allTranslationsUsed.splice(-1, 1)
+-
+-      for (let i = 0; i < allTranslationsUsed.length; i += 1) {
+-        if (!EXCEPTIONS.includes(allTranslationsUsed[i])) {
+-          // You can add keys to EXCEPTIONS (above) if you don't want them included in the test
+-          expect(allTranslationsDefined).toContainEqual(allTranslationsUsed[i])
+-        }
+-      }
+-      done()
+-    })
+-  }, 240000)
+-})
+-
+-function iterate(obj, stack, array) {
+-  for (const property in obj) {
+-    if (obj.hasOwnProperty(property)) {
+-      if (typeof obj[property] === "object") {
+-        iterate(obj[property], `${stack}.${property}`, array)
+-      } else {
+-        array.push(`${stack.slice(1)}.${property}`)
+-      }
+-    }
+-  }
+-
+-  return array
+-}
+diff --git a/IgniteDiffApp/tsconfig.json b/IgniteDiffApp/tsconfig.json
+index 436d2c9..e05bf0c 100644
+--- a/IgniteDiffApp/tsconfig.json
++++ b/IgniteDiffApp/tsconfig.json
+@@ -12,9 +12,9 @@
+     "noUnusedLocals": true,
+     "sourceMap": true,
+     "target": "es2015",
+-    "lib": ["es7"],
++    "lib": ["es6"],
+     "skipLibCheck": true
+   },
+   "exclude": ["node_modules"],
+-  "include": ["index.js", "app", "test", "storybook"]
++  "include": ["app", "test", "storybook"]
+ }
