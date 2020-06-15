@@ -1,0 +1,552 @@
+diff --git a/IgniteDiffApp/README.md b/IgniteDiffApp/README.md
+index e4514ad..0b76860 100644
+--- a/IgniteDiffApp/README.md
++++ b/IgniteDiffApp/README.md
+@@ -129,7 +129,7 @@ This directory will hold your Jest configs and mocks, as well as your [storyshot
+ From the command line in your generated app's root directory, enter `yarn run storybook`
+ This starts up the storybook server.
+ 
+-In `index.js`, change `SHOW_STORYBOOK` to `true` and reload the app.
++In `app/app.tsx`, change `SHOW_STORYBOOK` to `true` and reload the app.
+ 
+ For Visual Studio Code users, there is a handy extension that makes it easy to load Storybook use cases into a running emulator via tapping on items in the editor sidebar. Install the `React Native Storybook` extension by `Orta`, hit `cmd + shift + P` and select "Reconnect Storybook to VSCode". Expand the STORYBOOK section in the sidebar to see all use cases for components that have `.story.tsx` files in their directories.
+ 
+diff --git a/IgniteDiffApp/app/screens/demo-screen/demo-screen.tsx b/IgniteDiffApp/app/screens/demo-screen/demo-screen.tsx
+index b0146ff..7fd53c4 100644
+--- a/IgniteDiffApp/app/screens/demo-screen/demo-screen.tsx
++++ b/IgniteDiffApp/app/screens/demo-screen/demo-screen.tsx
+@@ -79,7 +79,7 @@ const HINT: TextStyle = {
+ 
+ export const DemoScreen: Component = observer(function DemoScreen() {
+   const navigation = useNavigation()
+-  const goBack = () => navigation.goBack()
++  const goBack = () => () => navigation.goBack()
+ 
+   const demoReactotron = React.useMemo(
+     () => async () => {
+diff --git a/IgniteDiffApp/ignite/ignite.json b/IgniteDiffApp/ignite/ignite.json
+index b9bb9d6..2f28c79 100644
+--- a/IgniteDiffApp/ignite/ignite.json
++++ b/IgniteDiffApp/ignite/ignite.json
+@@ -3,5 +3,5 @@
+   "generators": {},
+   "createdWith": "3.5.1",
+   "boilerplate": "ignite-bowser",
+-  "boilerplateVersion": "5.1.2"
++  "boilerplateVersion": "5.1.0"
+ }
+\ No newline at end of file
+diff --git a/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj b/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
+index d189b71..7499264 100644
+--- a/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
++++ b/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
+@@ -8,7 +8,7 @@
+ 
+ /* Begin PBXBuildFile section */
+ 		00E356F31AD99517003FC87E /* IgniteDiffAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* IgniteDiffAppTests.m */; };
+-		115730DA256056AA32E7C46C /* libPods-IgniteDiffApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDAA3AAEC50986D24D2F3993 /* libPods-IgniteDiffApp-tvOS.a */; };
++		0D99D3DD7DA97FCBF48236E1 /* libPods-IgniteDiffApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 202D8AC323B66D730E725B57 /* libPods-IgniteDiffApp.a */; };
+ 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+ 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
+ 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+@@ -17,27 +17,27 @@
+ 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+ 		2DCD954D1E0B4F2C00145EB5 /* IgniteDiffAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* IgniteDiffAppTests.m */; };
+-		5EA5FB75FA93C6FA2A2C4435 /* libPods-IgniteDiffApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3A680E0B10595D56BB7A6F /* libPods-IgniteDiffApp.a */; };
+-		8F4DAB67FA98FD120518DB19 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB59F472D86A98AB32436095 /* libPods-IgniteDiffApp-tvOSTests.a */; };
+-		C5D4A9F8FBE6433E02A639DF /* libPods-IgniteDiffAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B8701784FB4229E78DEFDD0 /* libPods-IgniteDiffAppTests.a */; };
+-		80BE3161710B4AEFB26A2AB3 /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DFF0AF96A5E14A06AD837CB6 /* Montserrat-Black.ttf */; };
+-		49F015A99D944EFF82727BCE /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 65CDE1A1346641E698502920 /* Montserrat-BlackItalic.ttf */; };
+-		2BB0854F15A544B9B835E005 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B42414093E184137B0B91CE0 /* Montserrat-Bold.ttf */; };
+-		4089F68E32034126999A763A /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B15B45A43E41473EA7C79A95 /* Montserrat-BoldItalic.ttf */; };
+-		4D4CB4F4E5094A00A9638110 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A9F7C3499A34A9D9972B45E /* Montserrat-ExtraBold.ttf */; };
+-		DA5BAA86A2F6492C8CB9E164 /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1FFA851292424480B330EAAC /* Montserrat-ExtraBoldItalic.ttf */; };
+-		EDBB9588A4FF4408B83781C5 /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BAF1BDC5BEB747E482A2A4BD /* Montserrat-ExtraLight.ttf */; };
+-		5D82858A6FDB490F957FB37E /* Montserrat-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F98EE948E20493A97B56F06 /* Montserrat-ExtraLightItalic.ttf */; };
+-		B2AE5E6338F8484EBDDF9E53 /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EED44CB38F84C9AB7F57BD0 /* Montserrat-Italic.ttf */; };
+-		CBCCB46A744D422DB8B9CFF6 /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 87193E7A42F743F0B263AE26 /* Montserrat-Light.ttf */; };
+-		A2483C0F4A0940FE9B9F3230 /* Montserrat-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA6DCDEE81894C2780C0BDBB /* Montserrat-LightItalic.ttf */; };
+-		3C41C789957B445EB05A7EFE /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CF025630EEE40E5A5E522EB /* Montserrat-Medium.ttf */; };
+-		19372F33A87A4ED29B0605C8 /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C68782D04C04DE0BE337C32 /* Montserrat-MediumItalic.ttf */; };
+-		4FAFCBAED159430F991F44D8 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8978B0EB8D014A12BC39B268 /* Montserrat-Regular.ttf */; };
+-		A79E64D37D7C4DD6822AC2F5 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D4ED4AA9E584EA3BE231661 /* Montserrat-SemiBold.ttf */; };
+-		14EBDA2A918340AFA144C5DB /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2AFDC86B99E4E31BEF0C690 /* Montserrat-SemiBoldItalic.ttf */; };
+-		616CA2DA3244485E92E53BA2 /* Montserrat-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A97AF426E58D4E1A89CC80FD /* Montserrat-Thin.ttf */; };
+-		2E621F5CEC0E4F22B0658458 /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 04B3E1B8287446BF94B0CE4C /* Montserrat-ThinItalic.ttf */; };
++		7869632441737451A94FEF27 /* libPods-IgniteDiffApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7968C27B75DB34AE6DEC6EA /* libPods-IgniteDiffApp-tvOS.a */; };
++		9EC794B0EA79F1E9141669F1 /* libPods-IgniteDiffAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B516C76CACE97793558CC032 /* libPods-IgniteDiffAppTests.a */; };
++		A7CD49E63AE2CABFC588DB93 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 679E2B8DB770A23FFBEA0B0C /* libPods-IgniteDiffApp-tvOSTests.a */; };
++		2603314FF92C43AC8C2125E7 /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 434FA41BD9574F1F95972FC6 /* Montserrat-Black.ttf */; };
++		2252B542518143FAA544C23B /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0E57C73665E64120A0C2B1F4 /* Montserrat-BlackItalic.ttf */; };
++		268E7DAE61AC4069AA7F1190 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2451173EFD5F4906836C3947 /* Montserrat-Bold.ttf */; };
++		9446F1689775459280FA286A /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA37C2316F224F21810A4A7E /* Montserrat-BoldItalic.ttf */; };
++		03E7C4B09CCE434DBF5D883D /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 632ED3612EA7435EA3172E5C /* Montserrat-ExtraBold.ttf */; };
++		26D4806A24A64D99A95206BB /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32D3D4822D6346098DD20BF9 /* Montserrat-ExtraBoldItalic.ttf */; };
++		1F4B12339FC74628BA764BEE /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 10F661C3DB8E47D8B2F3DB92 /* Montserrat-ExtraLight.ttf */; };
++		BA2A258D9DD74450AF1C052B /* Montserrat-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1303AE23E4F94847870AB769 /* Montserrat-ExtraLightItalic.ttf */; };
++		20FD6E27B5174D99AB8244FB /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 414CDCF0038041BD8D4E13D6 /* Montserrat-Italic.ttf */; };
++		A7781750C31D40A890E303E0 /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEB7AA4A178444CC9275FCDB /* Montserrat-Light.ttf */; };
++		F3EAF9C12723493F8906B645 /* Montserrat-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2389BD1796DB4C19A5C1A375 /* Montserrat-LightItalic.ttf */; };
++		6E86748A99F44CB5B8CCF51E /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2B81D35ED8D440D58877CABF /* Montserrat-Medium.ttf */; };
++		6B2B7C8A312F4E839B2C20FE /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A81FED9828143D4B16E1C30 /* Montserrat-MediumItalic.ttf */; };
++		8AD187F41F394718BCAA69DF /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC83894EDFB8453BB65C6E8A /* Montserrat-Regular.ttf */; };
++		AA66065B3245457791168461 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0887BD2A7F46471480F21CF4 /* Montserrat-SemiBold.ttf */; };
++		56DE2608D6144EBC928AD495 /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCB799A6918746B989786C9D /* Montserrat-SemiBoldItalic.ttf */; };
++		05E7012EF0054C4083BC4E79 /* Montserrat-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E1166D23E51B4AEEAB7CB0C3 /* Montserrat-Thin.ttf */; };
++		6801F63F768841CC8F294293 /* Montserrat-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 994D5C1B5C8D4765BDC5CF3C /* Montserrat-ThinItalic.ttf */; };
+ /* End PBXBuildFile section */
+ 
+ /* Begin PBXContainerItemProxy section */
+@@ -62,6 +62,8 @@
+ 		00E356EE1AD99517003FC87E /* IgniteDiffAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IgniteDiffAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+ 		00E356F21AD99517003FC87E /* IgniteDiffAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IgniteDiffAppTests.m; sourceTree = "<group>"; };
++		06B152513B7D400DDC829C98 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
++		0B906B3C462CC0C2BD24CEE7 /* Pods-IgniteDiffAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.release.xcconfig"; sourceTree = "<group>"; };
+ 		13B07F961A680F5B00A75B9A /* IgniteDiffApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IgniteDiffApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = IgniteDiffApp/AppDelegate.h; sourceTree = "<group>"; };
+ 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = IgniteDiffApp/AppDelegate.m; sourceTree = "<group>"; };
+@@ -69,40 +71,38 @@
+ 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = IgniteDiffApp/Images.xcassets; sourceTree = "<group>"; };
+ 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = IgniteDiffApp/Info.plist; sourceTree = "<group>"; };
+ 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = IgniteDiffApp/main.m; sourceTree = "<group>"; };
+-		2B5A40E0B64D8061328CDAC2 /* Pods-IgniteDiffApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.debug.xcconfig"; sourceTree = "<group>"; };
++		202D8AC323B66D730E725B57 /* libPods-IgniteDiffApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		2D02E47B1E0B4A5D006451C7 /* IgniteDiffApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IgniteDiffApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		2D02E4901E0B4A5D006451C7 /* IgniteDiffApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IgniteDiffApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		3699CCA3EF934D91B01AA500 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+-		6B8701784FB4229E78DEFDD0 /* libPods-IgniteDiffAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		77B457FDB4D019E534187E0E /* Pods-IgniteDiffAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.release.xcconfig"; sourceTree = "<group>"; };
+-		81D3A08435F3AB6AAD1A3591 /* Pods-IgniteDiffAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+-		B6CD803295BBD8E9C8034716 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+-		BB59F472D86A98AB32436095 /* libPods-IgniteDiffApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		BDAA3AAEC50986D24D2F3993 /* libPods-IgniteDiffApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		BE96DBC3F4BE069C5216FF4C /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+-		CA3A680E0B10595D56BB7A6F /* libPods-IgniteDiffApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		D2FFBB85577889C10C5C2FFA /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
++		646B8FDCAC0F6E948BE0F729 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
++		679E2B8DB770A23FFBEA0B0C /* libPods-IgniteDiffApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		7E0A327F50D91574C63EAD65 /* Pods-IgniteDiffApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.release.xcconfig"; sourceTree = "<group>"; };
++		860192C979682F8E64834CEA /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
++		A728CC7B20FD30C828568792 /* Pods-IgniteDiffAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.debug.xcconfig"; sourceTree = "<group>"; };
++		B516C76CACE97793558CC032 /* libPods-IgniteDiffAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		C5590FE46319DAAC32198BB5 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
++		C7968C27B75DB34AE6DEC6EA /* libPods-IgniteDiffApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		D2D999FB251E3E930D1A1E1E /* Pods-IgniteDiffApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.debug.xcconfig"; sourceTree = "<group>"; };
+ 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+ 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+-		FD9B8DC4CB380882C32D97AC /* Pods-IgniteDiffApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.release.xcconfig"; sourceTree = "<group>"; };
+-		DFF0AF96A5E14A06AD837CB6 /* Montserrat-Black.ttf */ = {isa = PBXFileReference; name = "Montserrat-Black.ttf"; path = "../app/theme/fonts/Montserrat-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		65CDE1A1346641E698502920 /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BlackItalic.ttf"; path = "../app/theme/fonts/Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		B42414093E184137B0B91CE0 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; name = "Montserrat-Bold.ttf"; path = "../app/theme/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		B15B45A43E41473EA7C79A95 /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		9A9F7C3499A34A9D9972B45E /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraBold.ttf"; path = "../app/theme/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		1FFA851292424480B330EAAC /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraBoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		BAF1BDC5BEB747E482A2A4BD /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraLight.ttf"; path = "../app/theme/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		4F98EE948E20493A97B56F06 /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraLightItalic.ttf"; path = "../app/theme/fonts/Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		4EED44CB38F84C9AB7F57BD0 /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; name = "Montserrat-Italic.ttf"; path = "../app/theme/fonts/Montserrat-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		87193E7A42F743F0B263AE26 /* Montserrat-Light.ttf */ = {isa = PBXFileReference; name = "Montserrat-Light.ttf"; path = "../app/theme/fonts/Montserrat-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		DA6DCDEE81894C2780C0BDBB /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-LightItalic.ttf"; path = "../app/theme/fonts/Montserrat-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		4CF025630EEE40E5A5E522EB /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; name = "Montserrat-Medium.ttf"; path = "../app/theme/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		8C68782D04C04DE0BE337C32 /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-MediumItalic.ttf"; path = "../app/theme/fonts/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		8978B0EB8D014A12BC39B268 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; name = "Montserrat-Regular.ttf"; path = "../app/theme/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		1D4ED4AA9E584EA3BE231661 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBold.ttf"; path = "../app/theme/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		E2AFDC86B99E4E31BEF0C690 /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		A97AF426E58D4E1A89CC80FD /* Montserrat-Thin.ttf */ = {isa = PBXFileReference; name = "Montserrat-Thin.ttf"; path = "../app/theme/fonts/Montserrat-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+-		04B3E1B8287446BF94B0CE4C /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ThinItalic.ttf"; path = "../app/theme/fonts/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		434FA41BD9574F1F95972FC6 /* Montserrat-Black.ttf */ = {isa = PBXFileReference; name = "Montserrat-Black.ttf"; path = "../app/theme/fonts/Montserrat-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		0E57C73665E64120A0C2B1F4 /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BlackItalic.ttf"; path = "../app/theme/fonts/Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		2451173EFD5F4906836C3947 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; name = "Montserrat-Bold.ttf"; path = "../app/theme/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		AA37C2316F224F21810A4A7E /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-BoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		632ED3612EA7435EA3172E5C /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraBold.ttf"; path = "../app/theme/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		32D3D4822D6346098DD20BF9 /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraBoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		10F661C3DB8E47D8B2F3DB92 /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraLight.ttf"; path = "../app/theme/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		1303AE23E4F94847870AB769 /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ExtraLightItalic.ttf"; path = "../app/theme/fonts/Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		414CDCF0038041BD8D4E13D6 /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; name = "Montserrat-Italic.ttf"; path = "../app/theme/fonts/Montserrat-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		CEB7AA4A178444CC9275FCDB /* Montserrat-Light.ttf */ = {isa = PBXFileReference; name = "Montserrat-Light.ttf"; path = "../app/theme/fonts/Montserrat-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		2389BD1796DB4C19A5C1A375 /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-LightItalic.ttf"; path = "../app/theme/fonts/Montserrat-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		2B81D35ED8D440D58877CABF /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; name = "Montserrat-Medium.ttf"; path = "../app/theme/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		5A81FED9828143D4B16E1C30 /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-MediumItalic.ttf"; path = "../app/theme/fonts/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		AC83894EDFB8453BB65C6E8A /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; name = "Montserrat-Regular.ttf"; path = "../app/theme/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		0887BD2A7F46471480F21CF4 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBold.ttf"; path = "../app/theme/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		FCB799A6918746B989786C9D /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBoldItalic.ttf"; path = "../app/theme/fonts/Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		E1166D23E51B4AEEAB7CB0C3 /* Montserrat-Thin.ttf */ = {isa = PBXFileReference; name = "Montserrat-Thin.ttf"; path = "../app/theme/fonts/Montserrat-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
++		994D5C1B5C8D4765BDC5CF3C /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; name = "Montserrat-ThinItalic.ttf"; path = "../app/theme/fonts/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+ /* End PBXFileReference section */
+ 
+ /* Begin PBXFrameworksBuildPhase section */
+@@ -110,7 +110,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				C5D4A9F8FBE6433E02A639DF /* libPods-IgniteDiffAppTests.a in Frameworks */,
++				9EC794B0EA79F1E9141669F1 /* libPods-IgniteDiffAppTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -118,7 +118,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				5EA5FB75FA93C6FA2A2C4435 /* libPods-IgniteDiffApp.a in Frameworks */,
++				0D99D3DD7DA97FCBF48236E1 /* libPods-IgniteDiffApp.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -126,7 +126,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				115730DA256056AA32E7C46C /* libPods-IgniteDiffApp-tvOS.a in Frameworks */,
++				7869632441737451A94FEF27 /* libPods-IgniteDiffApp-tvOS.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -134,7 +134,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				8F4DAB67FA98FD120518DB19 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */,
++				A7CD49E63AE2CABFC588DB93 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -177,30 +177,14 @@
+ 			children = (
+ 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+ 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
+-				CA3A680E0B10595D56BB7A6F /* libPods-IgniteDiffApp.a */,
+-				BDAA3AAEC50986D24D2F3993 /* libPods-IgniteDiffApp-tvOS.a */,
+-				BB59F472D86A98AB32436095 /* libPods-IgniteDiffApp-tvOSTests.a */,
+-				6B8701784FB4229E78DEFDD0 /* libPods-IgniteDiffAppTests.a */,
++				202D8AC323B66D730E725B57 /* libPods-IgniteDiffApp.a */,
++				C7968C27B75DB34AE6DEC6EA /* libPods-IgniteDiffApp-tvOS.a */,
++				679E2B8DB770A23FFBEA0B0C /* libPods-IgniteDiffApp-tvOSTests.a */,
++				B516C76CACE97793558CC032 /* libPods-IgniteDiffAppTests.a */,
+ 			);
+ 			name = Frameworks;
+ 			sourceTree = "<group>";
+ 		};
+-		34DECEDEA409C8A0F5932493 /* Pods */ = {
+-			isa = PBXGroup;
+-			children = (
+-				2B5A40E0B64D8061328CDAC2 /* Pods-IgniteDiffApp.debug.xcconfig */,
+-				FD9B8DC4CB380882C32D97AC /* Pods-IgniteDiffApp.release.xcconfig */,
+-				BE96DBC3F4BE069C5216FF4C /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */,
+-				B6CD803295BBD8E9C8034716 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */,
+-				3699CCA3EF934D91B01AA500 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */,
+-				D2FFBB85577889C10C5C2FFA /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */,
+-				81D3A08435F3AB6AAD1A3591 /* Pods-IgniteDiffAppTests.debug.xcconfig */,
+-				77B457FDB4D019E534187E0E /* Pods-IgniteDiffAppTests.release.xcconfig */,
+-			);
+-			name = Pods;
+-			path = Pods;
+-			sourceTree = "<group>";
+-		};
+ 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -216,8 +200,8 @@
+ 				00E356EF1AD99517003FC87E /* IgniteDiffAppTests */,
+ 				83CBBA001A601CBA00E9B192 /* Products */,
+ 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+-				34DECEDEA409C8A0F5932493 /* Pods */,
+-				700D72990A964CAA8938664C /* Resources */,
++				A6AEADC558079766793FA6B8 /* Pods */,
++				AB046B1A4F9F4AB2966344D1 /* Resources */,
+ 			);
+ 			indentWidth = 2;
+ 			sourceTree = "<group>";
+@@ -235,27 +219,43 @@
+ 			name = Products;
+ 			sourceTree = "<group>";
+ 		};
+-		700D72990A964CAA8938664C /* Resources */ = {
++		A6AEADC558079766793FA6B8 /* Pods */ = {
++			isa = PBXGroup;
++			children = (
++				D2D999FB251E3E930D1A1E1E /* Pods-IgniteDiffApp.debug.xcconfig */,
++				7E0A327F50D91574C63EAD65 /* Pods-IgniteDiffApp.release.xcconfig */,
++				860192C979682F8E64834CEA /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */,
++				06B152513B7D400DDC829C98 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */,
++				646B8FDCAC0F6E948BE0F729 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */,
++				C5590FE46319DAAC32198BB5 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */,
++				A728CC7B20FD30C828568792 /* Pods-IgniteDiffAppTests.debug.xcconfig */,
++				0B906B3C462CC0C2BD24CEE7 /* Pods-IgniteDiffAppTests.release.xcconfig */,
++			);
++			name = Pods;
++			path = Pods;
++			sourceTree = "<group>";
++		};
++		AB046B1A4F9F4AB2966344D1 /* Resources */ = {
+ 			isa = "PBXGroup";
+ 			children = (
+-				DFF0AF96A5E14A06AD837CB6 /* Montserrat-Black.ttf */,
+-				65CDE1A1346641E698502920 /* Montserrat-BlackItalic.ttf */,
+-				B42414093E184137B0B91CE0 /* Montserrat-Bold.ttf */,
+-				B15B45A43E41473EA7C79A95 /* Montserrat-BoldItalic.ttf */,
+-				9A9F7C3499A34A9D9972B45E /* Montserrat-ExtraBold.ttf */,
+-				1FFA851292424480B330EAAC /* Montserrat-ExtraBoldItalic.ttf */,
+-				BAF1BDC5BEB747E482A2A4BD /* Montserrat-ExtraLight.ttf */,
+-				4F98EE948E20493A97B56F06 /* Montserrat-ExtraLightItalic.ttf */,
+-				4EED44CB38F84C9AB7F57BD0 /* Montserrat-Italic.ttf */,
+-				87193E7A42F743F0B263AE26 /* Montserrat-Light.ttf */,
+-				DA6DCDEE81894C2780C0BDBB /* Montserrat-LightItalic.ttf */,
+-				4CF025630EEE40E5A5E522EB /* Montserrat-Medium.ttf */,
+-				8C68782D04C04DE0BE337C32 /* Montserrat-MediumItalic.ttf */,
+-				8978B0EB8D014A12BC39B268 /* Montserrat-Regular.ttf */,
+-				1D4ED4AA9E584EA3BE231661 /* Montserrat-SemiBold.ttf */,
+-				E2AFDC86B99E4E31BEF0C690 /* Montserrat-SemiBoldItalic.ttf */,
+-				A97AF426E58D4E1A89CC80FD /* Montserrat-Thin.ttf */,
+-				04B3E1B8287446BF94B0CE4C /* Montserrat-ThinItalic.ttf */,
++				434FA41BD9574F1F95972FC6 /* Montserrat-Black.ttf */,
++				0E57C73665E64120A0C2B1F4 /* Montserrat-BlackItalic.ttf */,
++				2451173EFD5F4906836C3947 /* Montserrat-Bold.ttf */,
++				AA37C2316F224F21810A4A7E /* Montserrat-BoldItalic.ttf */,
++				632ED3612EA7435EA3172E5C /* Montserrat-ExtraBold.ttf */,
++				32D3D4822D6346098DD20BF9 /* Montserrat-ExtraBoldItalic.ttf */,
++				10F661C3DB8E47D8B2F3DB92 /* Montserrat-ExtraLight.ttf */,
++				1303AE23E4F94847870AB769 /* Montserrat-ExtraLightItalic.ttf */,
++				414CDCF0038041BD8D4E13D6 /* Montserrat-Italic.ttf */,
++				CEB7AA4A178444CC9275FCDB /* Montserrat-Light.ttf */,
++				2389BD1796DB4C19A5C1A375 /* Montserrat-LightItalic.ttf */,
++				2B81D35ED8D440D58877CABF /* Montserrat-Medium.ttf */,
++				5A81FED9828143D4B16E1C30 /* Montserrat-MediumItalic.ttf */,
++				AC83894EDFB8453BB65C6E8A /* Montserrat-Regular.ttf */,
++				0887BD2A7F46471480F21CF4 /* Montserrat-SemiBold.ttf */,
++				FCB799A6918746B989786C9D /* Montserrat-SemiBoldItalic.ttf */,
++				E1166D23E51B4AEEAB7CB0C3 /* Montserrat-Thin.ttf */,
++				994D5C1B5C8D4765BDC5CF3C /* Montserrat-ThinItalic.ttf */,
+ 			);
+ 			name = Resources;
+ 			sourceTree = "<group>";
+@@ -268,7 +268,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "IgniteDiffAppTests" */;
+ 			buildPhases = (
+-				2F0853FEA26AC99DE44C1F18 /* [CP] Check Pods Manifest.lock */,
++				97349070C3AA684A90359768 /* [CP] Check Pods Manifest.lock */,
+ 				00E356EA1AD99517003FC87E /* Sources */,
+ 				00E356EB1AD99517003FC87E /* Frameworks */,
+ 				00E356EC1AD99517003FC87E /* Resources */,
+@@ -287,7 +287,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "IgniteDiffApp" */;
+ 			buildPhases = (
+-				5D7A19652077239435769482 /* [CP] Check Pods Manifest.lock */,
++				5CFC31D934F9721FB28072F1 /* [CP] Check Pods Manifest.lock */,
+ 				FD10A7F022414F080027D42C /* Start Packager */,
+ 				13B07F871A680F5B00A75B9A /* Sources */,
+ 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+@@ -307,7 +307,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "IgniteDiffApp-tvOS" */;
+ 			buildPhases = (
+-				15A84931CCD88A2E922E9361 /* [CP] Check Pods Manifest.lock */,
++				0D01A6894B0210887C1D301B /* [CP] Check Pods Manifest.lock */,
+ 				FD10A7F122414F3F0027D42C /* Start Packager */,
+ 				2D02E4771E0B4A5D006451C7 /* Sources */,
+ 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
+@@ -327,7 +327,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "IgniteDiffApp-tvOSTests" */;
+ 			buildPhases = (
+-				884300C09B71A2FC683FE88F /* [CP] Check Pods Manifest.lock */,
++				CC2A43F502F1B08AEA76D032 /* [CP] Check Pods Manifest.lock */,
+ 				2D02E48C1E0B4A5D006451C7 /* Sources */,
+ 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
+ 				2D02E48E1E0B4A5D006451C7 /* Resources */,
+@@ -401,24 +401,24 @@
+ 			files = (
+ 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+ 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+-				80BE3161710B4AEFB26A2AB3 /* Montserrat-Black.ttf in Resources */,
+-				49F015A99D944EFF82727BCE /* Montserrat-BlackItalic.ttf in Resources */,
+-				2BB0854F15A544B9B835E005 /* Montserrat-Bold.ttf in Resources */,
+-				4089F68E32034126999A763A /* Montserrat-BoldItalic.ttf in Resources */,
+-				4D4CB4F4E5094A00A9638110 /* Montserrat-ExtraBold.ttf in Resources */,
+-				DA5BAA86A2F6492C8CB9E164 /* Montserrat-ExtraBoldItalic.ttf in Resources */,
+-				EDBB9588A4FF4408B83781C5 /* Montserrat-ExtraLight.ttf in Resources */,
+-				5D82858A6FDB490F957FB37E /* Montserrat-ExtraLightItalic.ttf in Resources */,
+-				B2AE5E6338F8484EBDDF9E53 /* Montserrat-Italic.ttf in Resources */,
+-				CBCCB46A744D422DB8B9CFF6 /* Montserrat-Light.ttf in Resources */,
+-				A2483C0F4A0940FE9B9F3230 /* Montserrat-LightItalic.ttf in Resources */,
+-				3C41C789957B445EB05A7EFE /* Montserrat-Medium.ttf in Resources */,
+-				19372F33A87A4ED29B0605C8 /* Montserrat-MediumItalic.ttf in Resources */,
+-				4FAFCBAED159430F991F44D8 /* Montserrat-Regular.ttf in Resources */,
+-				A79E64D37D7C4DD6822AC2F5 /* Montserrat-SemiBold.ttf in Resources */,
+-				14EBDA2A918340AFA144C5DB /* Montserrat-SemiBoldItalic.ttf in Resources */,
+-				616CA2DA3244485E92E53BA2 /* Montserrat-Thin.ttf in Resources */,
+-				2E621F5CEC0E4F22B0658458 /* Montserrat-ThinItalic.ttf in Resources */,
++				2603314FF92C43AC8C2125E7 /* Montserrat-Black.ttf in Resources */,
++				2252B542518143FAA544C23B /* Montserrat-BlackItalic.ttf in Resources */,
++				268E7DAE61AC4069AA7F1190 /* Montserrat-Bold.ttf in Resources */,
++				9446F1689775459280FA286A /* Montserrat-BoldItalic.ttf in Resources */,
++				03E7C4B09CCE434DBF5D883D /* Montserrat-ExtraBold.ttf in Resources */,
++				26D4806A24A64D99A95206BB /* Montserrat-ExtraBoldItalic.ttf in Resources */,
++				1F4B12339FC74628BA764BEE /* Montserrat-ExtraLight.ttf in Resources */,
++				BA2A258D9DD74450AF1C052B /* Montserrat-ExtraLightItalic.ttf in Resources */,
++				20FD6E27B5174D99AB8244FB /* Montserrat-Italic.ttf in Resources */,
++				A7781750C31D40A890E303E0 /* Montserrat-Light.ttf in Resources */,
++				F3EAF9C12723493F8906B645 /* Montserrat-LightItalic.ttf in Resources */,
++				6E86748A99F44CB5B8CCF51E /* Montserrat-Medium.ttf in Resources */,
++				6B2B7C8A312F4E839B2C20FE /* Montserrat-MediumItalic.ttf in Resources */,
++				8AD187F41F394718BCAA69DF /* Montserrat-Regular.ttf in Resources */,
++				AA66065B3245457791168461 /* Montserrat-SemiBold.ttf in Resources */,
++				56DE2608D6144EBC928AD495 /* Montserrat-SemiBoldItalic.ttf in Resources */,
++				05E7012EF0054C4083BC4E79 /* Montserrat-Thin.ttf in Resources */,
++				6801F63F768841CC8F294293 /* Montserrat-ThinItalic.ttf in Resources */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -454,7 +454,7 @@
+ 			shellPath = /bin/sh;
+ 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+ 		};
+-		15A84931CCD88A2E922E9361 /* [CP] Check Pods Manifest.lock */ = {
++		0D01A6894B0210887C1D301B /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -490,7 +490,7 @@
+ 			shellPath = /bin/sh;
+ 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+ 		};
+-		2F0853FEA26AC99DE44C1F18 /* [CP] Check Pods Manifest.lock */ = {
++		5CFC31D934F9721FB28072F1 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -505,14 +505,14 @@
+ 			outputFileListPaths = (
+ 			);
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffAppTests-checkManifestLockResult.txt",
++				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		5D7A19652077239435769482 /* [CP] Check Pods Manifest.lock */ = {
++		97349070C3AA684A90359768 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -527,14 +527,14 @@
+ 			outputFileListPaths = (
+ 			);
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-checkManifestLockResult.txt",
++				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffAppTests-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		884300C09B71A2FC683FE88F /* [CP] Check Pods Manifest.lock */ = {
++		CC2A43F502F1B08AEA76D032 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -661,7 +661,7 @@
+ /* Begin XCBuildConfiguration section */
+ 		00E356F61AD99517003FC87E /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 81D3A08435F3AB6AAD1A3591 /* Pods-IgniteDiffAppTests.debug.xcconfig */;
++			baseConfigurationReference = A728CC7B20FD30C828568792 /* Pods-IgniteDiffAppTests.debug.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				GCC_PREPROCESSOR_DEFINITIONS = (
+@@ -684,7 +684,7 @@
+ 		};
+ 		00E356F71AD99517003FC87E /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 77B457FDB4D019E534187E0E /* Pods-IgniteDiffAppTests.release.xcconfig */;
++			baseConfigurationReference = 0B906B3C462CC0C2BD24CEE7 /* Pods-IgniteDiffAppTests.release.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				COPY_PHASE_STRIP = NO;
+@@ -704,7 +704,7 @@
+ 		};
+ 		13B07F941A680F5B00A75B9A /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 2B5A40E0B64D8061328CDAC2 /* Pods-IgniteDiffApp.debug.xcconfig */;
++			baseConfigurationReference = D2D999FB251E3E930D1A1E1E /* Pods-IgniteDiffApp.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CURRENT_PROJECT_VERSION = 1;
+@@ -724,7 +724,7 @@
+ 		};
+ 		13B07F951A680F5B00A75B9A /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = FD9B8DC4CB380882C32D97AC /* Pods-IgniteDiffApp.release.xcconfig */;
++			baseConfigurationReference = 7E0A327F50D91574C63EAD65 /* Pods-IgniteDiffApp.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CURRENT_PROJECT_VERSION = 1;
+@@ -743,7 +743,7 @@
+ 		};
+ 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = BE96DBC3F4BE069C5216FF4C /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */;
++			baseConfigurationReference = 860192C979682F8E64834CEA /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+@@ -771,7 +771,7 @@
+ 		};
+ 		2D02E4981E0B4A5E006451C7 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = B6CD803295BBD8E9C8034716 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */;
++			baseConfigurationReference = 06B152513B7D400DDC829C98 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+@@ -799,7 +799,7 @@
+ 		};
+ 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 3699CCA3EF934D91B01AA500 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */;
++			baseConfigurationReference = 646B8FDCAC0F6E948BE0F729 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+@@ -826,7 +826,7 @@
+ 		};
+ 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = D2FFBB85577889C10C5C2FFA /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */;
++			baseConfigurationReference = C5590FE46319DAAC32198BB5 /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+diff --git a/IgniteDiffApp/package.json b/IgniteDiffApp/package.json
+index 4944e17..e9a8513 100644
+--- a/IgniteDiffApp/package.json
++++ b/IgniteDiffApp/package.json
+@@ -52,10 +52,10 @@
+     "validate.js": "0.13.1"
+   },
+   "devDependencies": {
+-    "@babel/core": "^7.10.2",
++    "@babel/core": "^7.9.6",
+     "@babel/plugin-proposal-decorators": "^7.0.0",
+     "@babel/plugin-proposal-optional-catch-binding": "^7.0.0",
+-    "@babel/runtime": "^7.10.2",
++    "@babel/runtime": "^7.9.6",
+     "@storybook/addon-storyshots": "5.3.17",
+     "@storybook/react-native": "5.3.17",
+     "@storybook/react-native-server": "5.3.17",
+@@ -77,7 +77,7 @@
+     "eslint-plugin-react": "^7.12.4",
+     "eslint-plugin-react-native": "^3.6.0",
+     "eslint-plugin-standard": "^4.0.0",
+-    "ignite-bowser": "5.1.2",
++    "ignite-bowser": "5.1.0",
+     "jest": "25.5.4",
+     "jetifier": "^1.6.1",
+     "metro-react-native-babel-preset": "^0.59.0",
