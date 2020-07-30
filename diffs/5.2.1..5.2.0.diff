@@ -1,0 +1,382 @@
+diff --git a/IgniteDiffApp/ignite/ignite.json b/IgniteDiffApp/ignite/ignite.json
+index 66bdcc4..c16c584 100644
+--- a/IgniteDiffApp/ignite/ignite.json
++++ b/IgniteDiffApp/ignite/ignite.json
+@@ -1,7 +1,7 @@
+ {
+   "navigation": "react-navigation",
+   "generators": {},
+-  "createdWith": "3.5.2",
++  "createdWith": "3.5.1",
+   "boilerplate": "ignite-bowser",
+-  "boilerplateVersion": "5.2.1"
++  "boilerplateVersion": "5.2.0"
+ }
+\ No newline at end of file
+diff --git a/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj b/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
+index 48ee277..37b3705 100644
+--- a/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
++++ b/IgniteDiffApp/ios/IgniteDiffApp.xcodeproj/project.pbxproj
+@@ -16,10 +16,10 @@
+ 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+ 		2DCD954D1E0B4F2C00145EB5 /* IgniteDiffAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* IgniteDiffAppTests.m */; };
+-		300B1F735BF59E75873C5452 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 985D097F8B99B4FED14160CD /* libPods-IgniteDiffApp-tvOSTests.a */; };
+-		8B72D3E238D23F9B8D66AB1F /* libPods-IgniteDiffApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B5813DA3DD9549A2EFF370 /* libPods-IgniteDiffApp-tvOS.a */; };
+-		AF605B2832E3FB829F949D2D /* libPods-IgniteDiffAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0C22126067E56BAADC058B /* libPods-IgniteDiffAppTests.a */; };
+-		BDE24FB7EB7E11EF2B16335A /* libPods-IgniteDiffApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A7A42D13396EB36C52C060 /* libPods-IgniteDiffApp.a */; };
++		41EE5139C98E198AB81D9929 /* libPods-IgniteDiffApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE50213A830DAC5E92BFF6D2 /* libPods-IgniteDiffApp.a */; };
++		72EAE4606BEFA9CFB418FED3 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78BE1D8C80486A2C55DFAB17 /* libPods-IgniteDiffApp-tvOSTests.a */; };
++		ACD0AA90FC16E00E081283F1 /* libPods-IgniteDiffApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BB163E9D5F399F76B426510 /* libPods-IgniteDiffApp-tvOS.a */; };
++		D2E3CC4D928045E2EE4B66A0 /* libPods-IgniteDiffAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 098C9EFE52051B188A83F3C2 /* libPods-IgniteDiffAppTests.a */; };
+ /* End PBXBuildFile section */
+ 
+ /* Begin PBXContainerItemProxy section */
+@@ -44,7 +44,9 @@
+ 		00E356EE1AD99517003FC87E /* IgniteDiffAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IgniteDiffAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+ 		00E356F21AD99517003FC87E /* IgniteDiffAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IgniteDiffAppTests.m; sourceTree = "<group>"; };
+-		0A0C22126067E56BAADC058B /* libPods-IgniteDiffAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		067D2458FEF050FBA6B4C275 /* Pods-IgniteDiffAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.release.xcconfig"; sourceTree = "<group>"; };
++		098C9EFE52051B188A83F3C2 /* libPods-IgniteDiffAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		0E0DFCA14B8DA3F11BC4F6FE /* Pods-IgniteDiffApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.debug.xcconfig"; sourceTree = "<group>"; };
+ 		13B07F961A680F5B00A75B9A /* IgniteDiffApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IgniteDiffApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = IgniteDiffApp/AppDelegate.h; sourceTree = "<group>"; };
+ 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = IgniteDiffApp/AppDelegate.m; sourceTree = "<group>"; };
+@@ -52,21 +54,19 @@
+ 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = IgniteDiffApp/Images.xcassets; sourceTree = "<group>"; };
+ 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = IgniteDiffApp/Info.plist; sourceTree = "<group>"; };
+ 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = IgniteDiffApp/main.m; sourceTree = "<group>"; };
++		22645A7950D604FC2F34184B /* Pods-IgniteDiffApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+ 		2D02E47B1E0B4A5D006451C7 /* IgniteDiffApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IgniteDiffApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		2D02E4901E0B4A5D006451C7 /* IgniteDiffApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IgniteDiffApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		3D9DB688B237E214318B2C35 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+-		45B5813DA3DD9549A2EFF370 /* libPods-IgniteDiffApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		6A8B5AFB8348AC7C2BD36FE2 /* Pods-IgniteDiffAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.release.xcconfig"; sourceTree = "<group>"; };
+-		7572D780FD545F36267496B3 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+-		7F224F701146D6BD54342B8E /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+-		985D097F8B99B4FED14160CD /* libPods-IgniteDiffApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		99183703CD1F3A5FCDD9C3C8 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+-		BB1409CC06E8DC9CAE4863F6 /* Pods-IgniteDiffApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.debug.xcconfig"; sourceTree = "<group>"; };
+-		C9A7A42D13396EB36C52C060 /* libPods-IgniteDiffApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+-		EAB8E9CE10DDA861A895CC88 /* Pods-IgniteDiffAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.debug.xcconfig"; sourceTree = "<group>"; };
++		51628F328B0EB053886A4F19 /* Pods-IgniteDiffApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.release.xcconfig"; sourceTree = "<group>"; };
++		78BE1D8C80486A2C55DFAB17 /* libPods-IgniteDiffApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		7BB163E9D5F399F76B426510 /* libPods-IgniteDiffApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		89424C314F67868173790B5B /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
++		ABADDA9CC158F13DC7B79CF1 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOSTests/Pods-IgniteDiffApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
++		BD45693E8BF23F5ED18D7197 /* Pods-IgniteDiffAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffAppTests.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffAppTests/Pods-IgniteDiffAppTests.debug.xcconfig"; sourceTree = "<group>"; };
++		BE50213A830DAC5E92BFF6D2 /* libPods-IgniteDiffApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IgniteDiffApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
++		E61235F0D60563BF0173E001 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp-tvOS/Pods-IgniteDiffApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+ 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+ 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+-		F7B8E916A8857CF3213CF17A /* Pods-IgniteDiffApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IgniteDiffApp.release.xcconfig"; path = "Target Support Files/Pods-IgniteDiffApp/Pods-IgniteDiffApp.release.xcconfig"; sourceTree = "<group>"; };
+ /* End PBXFileReference section */
+ 
+ /* Begin PBXFrameworksBuildPhase section */
+@@ -74,7 +74,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				AF605B2832E3FB829F949D2D /* libPods-IgniteDiffAppTests.a in Frameworks */,
++				D2E3CC4D928045E2EE4B66A0 /* libPods-IgniteDiffAppTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -82,7 +82,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				BDE24FB7EB7E11EF2B16335A /* libPods-IgniteDiffApp.a in Frameworks */,
++				41EE5139C98E198AB81D9929 /* libPods-IgniteDiffApp.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -90,7 +90,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				8B72D3E238D23F9B8D66AB1F /* libPods-IgniteDiffApp-tvOS.a in Frameworks */,
++				ACD0AA90FC16E00E081283F1 /* libPods-IgniteDiffApp-tvOS.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -98,7 +98,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				300B1F735BF59E75873C5452 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */,
++				72EAE4606BEFA9CFB418FED3 /* libPods-IgniteDiffApp-tvOSTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -141,30 +141,14 @@
+ 			children = (
+ 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+ 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
+-				C9A7A42D13396EB36C52C060 /* libPods-IgniteDiffApp.a */,
+-				45B5813DA3DD9549A2EFF370 /* libPods-IgniteDiffApp-tvOS.a */,
+-				985D097F8B99B4FED14160CD /* libPods-IgniteDiffApp-tvOSTests.a */,
+-				0A0C22126067E56BAADC058B /* libPods-IgniteDiffAppTests.a */,
++				BE50213A830DAC5E92BFF6D2 /* libPods-IgniteDiffApp.a */,
++				7BB163E9D5F399F76B426510 /* libPods-IgniteDiffApp-tvOS.a */,
++				78BE1D8C80486A2C55DFAB17 /* libPods-IgniteDiffApp-tvOSTests.a */,
++				098C9EFE52051B188A83F3C2 /* libPods-IgniteDiffAppTests.a */,
+ 			);
+ 			name = Frameworks;
+ 			sourceTree = "<group>";
+ 		};
+-		447BDAEFDC4C0A22C829F315 /* Pods */ = {
+-			isa = PBXGroup;
+-			children = (
+-				BB1409CC06E8DC9CAE4863F6 /* Pods-IgniteDiffApp.debug.xcconfig */,
+-				F7B8E916A8857CF3213CF17A /* Pods-IgniteDiffApp.release.xcconfig */,
+-				7572D780FD545F36267496B3 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */,
+-				3D9DB688B237E214318B2C35 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */,
+-				99183703CD1F3A5FCDD9C3C8 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */,
+-				7F224F701146D6BD54342B8E /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */,
+-				EAB8E9CE10DDA861A895CC88 /* Pods-IgniteDiffAppTests.debug.xcconfig */,
+-				6A8B5AFB8348AC7C2BD36FE2 /* Pods-IgniteDiffAppTests.release.xcconfig */,
+-			);
+-			name = Pods;
+-			path = Pods;
+-			sourceTree = "<group>";
+-		};
+ 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -180,8 +164,8 @@
+ 				00E356EF1AD99517003FC87E /* IgniteDiffAppTests */,
+ 				83CBBA001A601CBA00E9B192 /* Products */,
+ 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+-				447BDAEFDC4C0A22C829F315 /* Pods */,
+-				20FDFA6A44814DBD99FE4DE5 /* Resources */,
++				FC2DCDBEAA39D7BAD53ADBE6 /* Pods */,
++				4FFBAAB757BE45B3A437D51A /* Resources */,
+ 			);
+ 			indentWidth = 2;
+ 			sourceTree = "<group>";
+@@ -199,7 +183,23 @@
+ 			name = Products;
+ 			sourceTree = "<group>";
+ 		};
+-		20FDFA6A44814DBD99FE4DE5 /* Resources */ = {
++		FC2DCDBEAA39D7BAD53ADBE6 /* Pods */ = {
++			isa = PBXGroup;
++			children = (
++				0E0DFCA14B8DA3F11BC4F6FE /* Pods-IgniteDiffApp.debug.xcconfig */,
++				51628F328B0EB053886A4F19 /* Pods-IgniteDiffApp.release.xcconfig */,
++				E61235F0D60563BF0173E001 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */,
++				22645A7950D604FC2F34184B /* Pods-IgniteDiffApp-tvOS.release.xcconfig */,
++				ABADDA9CC158F13DC7B79CF1 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */,
++				89424C314F67868173790B5B /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */,
++				BD45693E8BF23F5ED18D7197 /* Pods-IgniteDiffAppTests.debug.xcconfig */,
++				067D2458FEF050FBA6B4C275 /* Pods-IgniteDiffAppTests.release.xcconfig */,
++			);
++			name = Pods;
++			path = Pods;
++			sourceTree = "<group>";
++		};
++		4FFBAAB757BE45B3A437D51A /* Resources */ = {
+ 			isa = "PBXGroup";
+ 			children = (
+ 			);
+@@ -214,7 +214,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "IgniteDiffAppTests" */;
+ 			buildPhases = (
+-				65F920A3F4D06F6F5A359892 /* [CP] Check Pods Manifest.lock */,
++				8D85066F25CED8F930FBDCB3 /* [CP] Check Pods Manifest.lock */,
+ 				00E356EA1AD99517003FC87E /* Sources */,
+ 				00E356EB1AD99517003FC87E /* Frameworks */,
+ 				00E356EC1AD99517003FC87E /* Resources */,
+@@ -233,7 +233,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "IgniteDiffApp" */;
+ 			buildPhases = (
+-				E14000509001AF8D590D0F62 /* [CP] Check Pods Manifest.lock */,
++				DA446B05CD8E9D6D79D56524 /* [CP] Check Pods Manifest.lock */,
+ 				FD10A7F022414F080027D42C /* Start Packager */,
+ 				13B07F871A680F5B00A75B9A /* Sources */,
+ 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+@@ -253,7 +253,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "IgniteDiffApp-tvOS" */;
+ 			buildPhases = (
+-				C11BC9BDF57BDC15028BCC2D /* [CP] Check Pods Manifest.lock */,
++				AC0F2B9D171AA46552D501F1 /* [CP] Check Pods Manifest.lock */,
+ 				FD10A7F122414F3F0027D42C /* Start Packager */,
+ 				2D02E4771E0B4A5D006451C7 /* Sources */,
+ 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
+@@ -273,7 +273,7 @@
+ 			isa = PBXNativeTarget;
+ 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "IgniteDiffApp-tvOSTests" */;
+ 			buildPhases = (
+-				B38E712845A5DD16598AA618 /* [CP] Check Pods Manifest.lock */,
++				7738482C1A18228CA576A32F /* [CP] Check Pods Manifest.lock */,
+ 				2D02E48C1E0B4A5D006451C7 /* Sources */,
+ 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
+ 				2D02E48E1E0B4A5D006451C7 /* Resources */,
+@@ -396,7 +396,7 @@
+ 			shellPath = /bin/sh;
+ 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+ 		};
+-		65F920A3F4D06F6F5A359892 /* [CP] Check Pods Manifest.lock */ = {
++		7738482C1A18228CA576A32F /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -411,14 +411,14 @@
+ 			outputFileListPaths = (
+ 			);
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffAppTests-checkManifestLockResult.txt",
++				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-tvOSTests-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		B38E712845A5DD16598AA618 /* [CP] Check Pods Manifest.lock */ = {
++		8D85066F25CED8F930FBDCB3 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -433,14 +433,14 @@
+ 			outputFileListPaths = (
+ 			);
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffApp-tvOSTests-checkManifestLockResult.txt",
++				"$(DERIVED_FILE_DIR)/Pods-IgniteDiffAppTests-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		C11BC9BDF57BDC15028BCC2D /* [CP] Check Pods Manifest.lock */ = {
++		AC0F2B9D171AA46552D501F1 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -462,7 +462,7 @@
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		E14000509001AF8D590D0F62 /* [CP] Check Pods Manifest.lock */ = {
++		DA446B05CD8E9D6D79D56524 /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -589,7 +589,7 @@
+ /* Begin XCBuildConfiguration section */
+ 		00E356F61AD99517003FC87E /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = EAB8E9CE10DDA861A895CC88 /* Pods-IgniteDiffAppTests.debug.xcconfig */;
++			baseConfigurationReference = BD45693E8BF23F5ED18D7197 /* Pods-IgniteDiffAppTests.debug.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				GCC_PREPROCESSOR_DEFINITIONS = (
+@@ -612,7 +612,7 @@
+ 		};
+ 		00E356F71AD99517003FC87E /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 6A8B5AFB8348AC7C2BD36FE2 /* Pods-IgniteDiffAppTests.release.xcconfig */;
++			baseConfigurationReference = 067D2458FEF050FBA6B4C275 /* Pods-IgniteDiffAppTests.release.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				COPY_PHASE_STRIP = NO;
+@@ -632,7 +632,7 @@
+ 		};
+ 		13B07F941A680F5B00A75B9A /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = BB1409CC06E8DC9CAE4863F6 /* Pods-IgniteDiffApp.debug.xcconfig */;
++			baseConfigurationReference = 0E0DFCA14B8DA3F11BC4F6FE /* Pods-IgniteDiffApp.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CURRENT_PROJECT_VERSION = 1;
+@@ -652,7 +652,7 @@
+ 		};
+ 		13B07F951A680F5B00A75B9A /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = F7B8E916A8857CF3213CF17A /* Pods-IgniteDiffApp.release.xcconfig */;
++			baseConfigurationReference = 51628F328B0EB053886A4F19 /* Pods-IgniteDiffApp.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CURRENT_PROJECT_VERSION = 1;
+@@ -671,7 +671,7 @@
+ 		};
+ 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 7572D780FD545F36267496B3 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */;
++			baseConfigurationReference = E61235F0D60563BF0173E001 /* Pods-IgniteDiffApp-tvOS.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+@@ -699,7 +699,7 @@
+ 		};
+ 		2D02E4981E0B4A5E006451C7 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 3D9DB688B237E214318B2C35 /* Pods-IgniteDiffApp-tvOS.release.xcconfig */;
++			baseConfigurationReference = 22645A7950D604FC2F34184B /* Pods-IgniteDiffApp-tvOS.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+@@ -727,7 +727,7 @@
+ 		};
+ 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 99183703CD1F3A5FCDD9C3C8 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */;
++			baseConfigurationReference = ABADDA9CC158F13DC7B79CF1 /* Pods-IgniteDiffApp-tvOSTests.debug.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+@@ -754,7 +754,7 @@
+ 		};
+ 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 7F224F701146D6BD54342B8E /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */;
++			baseConfigurationReference = 89424C314F67868173790B5B /* Pods-IgniteDiffApp-tvOSTests.release.xcconfig */;
+ 			buildSettings = {
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+diff --git a/IgniteDiffApp/package.json b/IgniteDiffApp/package.json
+index aa78018..bdbfd08 100644
+--- a/IgniteDiffApp/package.json
++++ b/IgniteDiffApp/package.json
+@@ -52,10 +52,10 @@
+     "validate.js": "0.13.1"
+   },
+   "devDependencies": {
+-    "@babel/core": "^7.10.5",
++    "@babel/core": "^7.10.2",
+     "@babel/plugin-proposal-decorators": "^7.0.0",
+     "@babel/plugin-proposal-optional-catch-binding": "^7.0.0",
+-    "@babel/runtime": "^7.10.5",
++    "@babel/runtime": "^7.10.2",
+     "@storybook/addon-storyshots": "5.3.17",
+     "@storybook/react-native": "5.3.17",
+     "@storybook/react-native-server": "5.3.17",
+@@ -66,7 +66,7 @@
+     "@types/react-test-renderer": "16.9.2",
+     "@typescript-eslint/eslint-plugin": "^2.24.0",
+     "@typescript-eslint/parser": "^2.24.0",
+-    "babel-jest": "^26.2.0",
++    "babel-jest": "^26.0.1",
+     "detox": "^16.0.0",
+     "eslint": "^6.6.0",
+     "eslint-config-prettier": "^6.0.0",
+@@ -77,10 +77,10 @@
+     "eslint-plugin-react": "^7.12.4",
+     "eslint-plugin-react-native": "^3.6.0",
+     "eslint-plugin-standard": "^4.0.0",
+-    "ignite-bowser": "5.2.1",
++    "ignite-bowser": "5.2.0",
+     "jest": "25.5.4",
+     "jetifier": "^1.6.1",
+-    "metro-react-native-babel-preset": "^0.61.0",
++    "metro-react-native-babel-preset": "^0.59.0",
+     "npm-run-all": "4.1.5",
+     "patch-package": "6.2.1",
+     "postinstall-prepare": "1.0.1",
