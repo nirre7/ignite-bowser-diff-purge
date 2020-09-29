@@ -20,8 +20,10 @@ const generateTable = async () => {
         'this is cool',
         'purge time!!',
         'i love diffs',
+        'Infinite Red',
         'diffs == fun',
         'IgniteBowser',
+        'rn core team',
     ]
 
     const diffTable = [
